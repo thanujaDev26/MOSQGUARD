@@ -1,14 +1,25 @@
+// android/app/build.gradle (App Level)
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    // Removed Google Services plugin since Firebase is not being used
+    id "dev.flutter.flutter-gradle-plugin"  // Flutter Gradle Plugin
 }
 
 android {
     namespace = "com.example.mosqguard"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+
+    // Update compileSdkVersion to 34
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId = "com.example.mosqguard"
+        minSdkVersion 21
+        targetSdkVersion 34  // Update targetSdkVersion to 34
+        versionCode 1
+        versionName "1.0.0"
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -19,26 +30,15 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.mosqguard"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.debug
         }
     }
 }
 
+// Removed the apply plugin line for google-services since it's not needed
+
 flutter {
-    source = "../.."
+    source = "../.."  // Path to the Flutter source (usually not changed unless necessary)
 }

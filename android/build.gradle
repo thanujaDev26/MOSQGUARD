@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Update to a version that supports compileSdkVersion 34 (e.g., 8.2.0)
+        classpath 'com.android.tools.build:gradle:8.2.0'
+        // Removed Google services classpath as it's not needed since Firebase is not being used
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -9,6 +21,7 @@ rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
