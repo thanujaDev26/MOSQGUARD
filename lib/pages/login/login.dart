@@ -38,7 +38,7 @@ class Login extends StatelessWidget {
                     child: Row(
                       children: [
                         Image.asset(
-                          'assets/icons/sri_lanka.png',
+                          'assets/icons/sri-lanka.png',
                           width: 40,
                           height: 30,
                         ),
@@ -102,19 +102,19 @@ class Login extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                 child: Column(
-                  children: const [
+                  children: [
                     SocialButton(
-                      icon: Icons.g_mobiledata,
+                      icon: "assets/icons/google.png",
                       label: 'Continue with Google',
                     ),
                     SizedBox(height: 20.0),
                     SocialButton(
-                      icon: Icons.apple,
+                      icon: "assets/icons/apple-logo.png",
                       label: 'Continue with Apple',
                     ),
                     SizedBox(height: 20.0),
                     SocialButton(
-                      icon: Icons.facebook,
+                      icon: "assets/icons/facebook.png",
                       label: 'Continue with Facebook',
                     ),
                     SizedBox(height: 20.0),
@@ -131,7 +131,7 @@ class Login extends StatelessWidget {
 }
 
 class SocialButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String label;
 
   const SocialButton({required this.icon, required this.label});
@@ -142,7 +142,7 @@ class SocialButton extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton.icon(
         onPressed: () {},
-        icon: Icon(icon, size: 24.0),
+        icon: Image.asset(icon, width: 24,height: 24,),
         label: Text(
           label,
           style: const TextStyle(
@@ -152,7 +152,7 @@ class SocialButton extends StatelessWidget {
         ),
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
-          side: const BorderSide(color: Colors.blueAccent),
+          side: BorderSide(color: Colors.blueAccent),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
