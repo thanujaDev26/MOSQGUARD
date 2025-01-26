@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/Appbar/Header.dart';
 import 'package:mosqguard/pages/Appbar/Footer.dart';
 import 'package:mosqguard/pages/dashboard/HomeBody.dart';
+import 'package:mosqguard/pages/Appbar/Drawer.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -10,6 +11,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(), // Use the custom AppBar here
+      endDrawer: const CustomDrawer(),
       body: Center(
         child: CustomHome(),
       ),
