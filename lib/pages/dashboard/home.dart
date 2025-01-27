@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(), // Use the custom AppBar here
-      endDrawer: const CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Center(
         child: CustomHome(),
       ),

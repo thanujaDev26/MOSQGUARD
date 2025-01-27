@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon: const Icon(Icons.menu, color: Colors.white),
                     onPressed: () {
                       // Open the end drawer (ensuring the scaffold context is found properly)
-                      Scaffold.maybeOf(context)?.openEndDrawer();
+                      Scaffold.maybeOf(context)?.openDrawer();
                     },
                   ),
                   const SizedBox(width: 8),
