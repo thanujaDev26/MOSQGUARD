@@ -13,14 +13,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top subtitle
-          const Text(
-            'Dengue Hotspot',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
           const SizedBox(height: 4),
           // Main row for the title, menu, and actions
           Row(
@@ -30,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.white),
+                    icon: const Icon(Icons.menu, color: Colors.black),
                     onPressed: () {
                       // Open the end drawer (ensuring the scaffold context is found properly)
                       Scaffold.maybeOf(context)?.openDrawer();
@@ -41,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     text: const TextSpan(
                       text: 'MOS',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -57,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         TextSpan(
                           text: 'GUARD',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
@@ -69,7 +61,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               // Right section: News icon
               IconButton(
-                icon: const Icon(Icons.article, color: Colors.white),
+                icon: const Icon(Icons.article, color: Colors.black),
                 onPressed: () {
                   // Action for news button
                   debugPrint('News button clicked');
