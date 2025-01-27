@@ -191,7 +191,13 @@ class Home extends StatelessWidget {
             selectedItemColor: Colors.blue,
             unselectedItemColor: Colors.grey,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: ""),
+              BottomNavigationBarItem(
+                  icon: GestureDetector(
+                    onTap: (){
+                      print("object");
+                    },
+                      child: Icon(Icons.grid_view)), label: ""
+              ),
               BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
               BottomNavigationBarItem(
                 icon: GestureDetector(
