@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: false, // Remove default back button
       elevation: 0,
       title: Column(
