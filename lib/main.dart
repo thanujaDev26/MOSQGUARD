@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/login/login.dart';
+import 'package:mosqguard/pages/splash/splash.dart';
 
 void main(){
   runApp(MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Splash(),
     );
   }
 }
