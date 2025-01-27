@@ -33,7 +33,10 @@ class CustomBottomBar extends StatelessWidget {
             icon: Icon(Icons.bug_report),
             color: Colors.blue,
             onPressed: () {
-              // Action for the bug icon
+              //Navigator.push(
+              //  context,
+              //  MaterialPageRoute(builder: (context) => SecondPage()),
+              //);
             },
           ),
           Container(

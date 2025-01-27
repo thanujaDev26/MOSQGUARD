@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/Appbar/Drawer.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -31,7 +32,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   IconButton(
                     icon: const Icon(Icons.menu, color: Colors.white),
                     onPressed: () {
-                      // Menu button action
+                      // Open the end drawer (ensuring the scaffold context is found properly)
+                      Scaffold.maybeOf(context)?.openDrawer();
                     },
                   ),
                   const SizedBox(width: 8),
@@ -69,7 +71,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.article, color: Colors.white),
                 onPressed: () {
-                  // News button action
+                  // Action for news button
+                  debugPrint('News button clicked');
                 },
               ),
             ],
