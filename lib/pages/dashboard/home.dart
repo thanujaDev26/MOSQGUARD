@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/capture/capture.dart';
+import 'package:mosqguard/pages/sidebar/sidebar.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -8,9 +9,13 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.black, size: 30),
-          onPressed: () {},
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu, color: Colors.black, size: 30),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,13 +27,13 @@ class Home extends StatelessWidget {
             ),
           ],
         ),
-        centerTitle: true, // Ensure the title stays centered
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.list, color: Colors.black, size: 30),
-            onPressed: () {}, // Add functionality if needed
+            onPressed: () {},
           ),
-          SizedBox(width: 10), // Adjust spacing if needed
+          SizedBox(width: 10),
         ],
       ),
       body: SingleChildScrollView(
@@ -39,7 +44,6 @@ class Home extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-
                   Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -135,7 +139,6 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            // Monthly Report Button
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -182,9 +185,9 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
+      drawer: Sidebar(), // The Sidebar is now connected here
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
-
         children: [
           BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
@@ -193,9 +196,9 @@ class Home extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                   icon: GestureDetector(
-                    onTap: (){
-                      print("object");
-                    },
+                      onTap: (){
+                        print("object");
+                      },
                       child: Icon(Icons.grid_view)), label: ""
               ),
               BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
