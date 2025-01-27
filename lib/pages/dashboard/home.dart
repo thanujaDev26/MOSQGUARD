@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/capture/capture.dart';
 import 'package:mosqguard/pages/sidebar/sidebar.dart';
 
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
