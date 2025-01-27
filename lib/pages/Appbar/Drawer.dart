@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../utils/theme_notifier.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile section
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(40),
             color: Colors.grey[200],
             child: Row(
               children: [
@@ -61,15 +67,15 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Help'),
             onTap: () {},
           ),
-          ListTile(
-            leading: const Icon(Icons.dark_mode, color: Colors.black),
+          SwitchListTile(
+            value: isDarkMode,
+            activeColor: Colors.black,
+            inactiveThumbColor: Colors.grey,
             title: const Text('Dark Mode'),
-            trailing: Switch(
-              value: false,
-              onChanged: (bool value) {
-                // Handle dark mode toggle
-              },
-            ),
+            secondary: const Icon(Icons.dark_mode, color: Colors.black),
+            onChanged: (bool value) {
+              themeNotifier.toggleTheme(value);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.orange),

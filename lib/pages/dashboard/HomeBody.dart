@@ -6,133 +6,152 @@ class CustomHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Total Reportings Card
-            Card(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Total Reportings\nTo The Date',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          '12',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Icon(Icons.person, size: 48, color: Colors.white),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Past 24 Hours Card
-            Card(
-              color: Colors.yellow[700],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Past 24 Hours',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          '2',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Icon(Icons.access_time, size: 48, color: Colors.white),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Monthly Report Button
-            Center(
-              child: OutlinedButton(
-                onPressed: () {
-                  // Action for monthly report
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.green),
+      child: Column(
+        children: [
+          // Cards Section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  color: Color(0xFF004DB9),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Total Reportings",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "12",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/mosqguard/Reporting Person.png',
+                          height: 90,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: const Text(
-                  'Monthly Report',
-                  style: TextStyle(color: Colors.green, fontSize: 16),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
 
-            // Map Section
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/map_example.png', // Replace with your map image asset
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
+                SizedBox(height: 16),
 
-            // Map Legend
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                LegendItem(color: Colors.red, label: 'Reported Area'),
-                LegendItem(color: Colors.orange, label: 'On Progress'),
-                LegendItem(color: Colors.black, label: 'Rejected'),
-                LegendItem(color: Colors.green, label: 'Completed'),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Color(0xFFFFCC66),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "24",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(Icons.access_time, color: Colors.red),
+                                ],
+                              ),
+                              Text(
+                                "Past 24 Hours",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "2",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              side: BorderSide(color: Colors.green),
+            ),
+            child: Text(
+              "Monthly Report",
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
+          SizedBox(height: 16),
+          // Map Section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  color: Colors.grey[300],
+                  child: Center(
+                    child: Text(
+                      "Map Placeholder",
+                      style: TextStyle(color: Colors.black45),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildLegendItem("Reported Area", Colors.red),
+                    _buildLegendItem("On Progress", Colors.green),
+                    _buildLegendItem("Rejected", Colors.black),
+                    _buildLegendItem("Completed", Colors.yellow),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -165,4 +184,17 @@ class LegendItem extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget _buildLegendItem(String label, Color color) {
+  return Row(
+    children: [
+      CircleAvatar(
+        radius: 6,
+        backgroundColor: color,
+      ),
+      SizedBox(width: 4),
+      Text(label, style: TextStyle(fontSize: 12)),
+    ],
+  );
 }
