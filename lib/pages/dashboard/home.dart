@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/capture/capture.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -193,9 +194,14 @@ class Home extends StatelessWidget {
               BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: ""),
               BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
               BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Icon(Icons.add_circle, size: 70, color: Color(0xff002353),),
+                icon: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Capture()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Icon(Icons.add_circle, size: 70, color: Color(0xff002353),),
+                  ),
                 ),
                 label: "",
               ),
