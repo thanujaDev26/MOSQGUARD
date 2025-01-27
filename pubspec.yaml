@@ -22,7 +22,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/App_Icon.png"  # Path to your app icon image
+  image_path: "assets/mosqguard/Logo-1.png"
+  adaptive_icon_background: "#FFFFFF"
 
 flutter:
   uses-material-design: true

@@ -67,7 +67,6 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Resizable image
               SizedBox(
                 width: _animation.value,
                 height: _animation.value,

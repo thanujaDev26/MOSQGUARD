@@ -9,12 +9,10 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           title:Text("Home Page"),
         ),
-      body: Container(
-        child: Column(
-          children: [
-            Text("Hello")
-          ],
-        ),
+      body: Column(
+        children: [
+          Text("Hello")
+        ],
       ),
     );
   }
