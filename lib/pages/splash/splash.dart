@@ -67,13 +67,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Resizable image
               SizedBox(
                 width: _animation.value,
                 height: _animation.value,
                 child: Image.asset("assets/mosqguard/Logo-1.png"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               if (_showSecondImage)
                 Image.asset(
                   "assets/mosqguard/Logo-2.png",
