@@ -186,7 +186,7 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      drawer: Sidebar(), // The Sidebar is now connected here
+      drawer: Sidebar(),
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
         children: [

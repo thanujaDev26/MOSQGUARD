@@ -13,12 +13,11 @@ class Sidebar extends StatelessWidget {
     return Drawer(
       backgroundColor: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // Drawer Header
             DrawerHeader(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.transparent,
               ),
               child: Column(
