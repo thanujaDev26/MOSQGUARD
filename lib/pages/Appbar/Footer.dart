@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../capture/capture.dart';
+import 'package:mosqguard/pages/notification/Notification.dart';
 
 class CustomBottomBar extends StatelessWidget {
   @override
@@ -32,7 +33,20 @@ class CustomBottomBar extends StatelessWidget {
               ),
               label: "",
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.notifications), label: ""),
+            BottomNavigationBarItem(icon: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NotificationPage()),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Icon(Icons.notifications),
+              ),
+            ),
+                label: ""
+            ),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
           ],
         ),
