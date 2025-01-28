@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/authentications/google_auth.dart';
 import 'package:mosqguard/pages/dashboard/home.dart';
 
 class Login extends StatelessWidget {
@@ -111,9 +112,14 @@ class Login extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   child: Column(
                     children: [
-                      SocialButton(
-                        icon: "assets/icons/google.png",
-                        label: 'Continue with Google',
+                      GestureDetector(
+                        onTap: (){
+                          AuthMethods().signInWithGoogle(context);
+                        },
+                        child: SocialButton(
+                          icon: "assets/icons/google.png",
+                          label: 'Continue with Google',
+                        ),
                       ),
                       SizedBox(height: 20.0),
                       SocialButton(
