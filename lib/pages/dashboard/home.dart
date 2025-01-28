@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/capture/capture.dart';
 import 'package:mosqguard/pages/sidebar/sidebar.dart';
+import 'package:mosqguard/pages/status/status.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -201,7 +202,13 @@ class Home extends StatelessWidget {
                       },
                       child: Icon(Icons.grid_view)), label: ""
               ),
-              BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
+              BottomNavigationBarItem(
+                  icon: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Status()));
+                      },
+                      child: Icon(Icons.bug_report)), label: ""
+              ),
               BottomNavigationBarItem(
                 icon: GestureDetector(
                   onTap: (){
