@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:mosqguard/pages/capture/capture.dart';
 import 'package:mosqguard/pages/sidebar/sidebar.dart';
 import 'package:mosqguard/pages/status/status.dart';
-
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -186,7 +186,7 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      drawer: Sidebar(), // The Sidebar is now connected here
+      drawer: Sidebar(),
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -240,6 +240,7 @@ class Home extends StatelessWidget {
         SizedBox(width: 4),
         Text(label, style: TextStyle(fontSize: 12)),
       ],
+
     );
   }
 }
