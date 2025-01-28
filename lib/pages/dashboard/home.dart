@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mosqguard/pages/capture/capture.dart';
-import 'package:mosqguard/pages/sidebar/sidebar.dart';
-
+import 'package:mosqguard/pages/Appbar/Header.dart';
+import 'package:mosqguard/pages/Appbar/Footer.dart';
+import 'package:mosqguard/pages/dashboard/HomeBody.dart';
+import 'package:mosqguard/pages/Appbar/Drawer.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -234,6 +235,7 @@ class Home extends StatelessWidget {
         SizedBox(width: 4),
         Text(label, style: TextStyle(fontSize: 12)),
       ],
+
     );
   }
 }
