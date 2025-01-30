@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosqguard/authentications/google_auth.dart';
 import 'package:mosqguard/pages/dashboard/home.dart';
+import 'package:mosqguard/pages/login/otp_auth.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -76,7 +77,7 @@ class Login extends StatelessWidget {
                       print("Clicked");
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => (OTPVerification())),
                       );
                     },
                     style: ElevatedButton.styleFrom(
