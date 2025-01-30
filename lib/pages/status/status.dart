@@ -23,17 +23,17 @@ class Status extends StatelessWidget {
           //     },
           //   ),
           // ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/mosqguard/Logo-3.png',
-                width: 150,
-              ),
-            ],
-          ),
-          centerTitle: true,
+          // title: Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+          //   children: [
+          //     Image.asset(
+          //       'assets/mosqguard/Logo-3.png',
+          //       width: 150,
+          //     ),
+          //   ],
+          // ),
+          // centerTitle: true,
           // actions: [
           //   IconButton(
           //     icon: Icon(Icons.list, color: Colors.black, size: 30),

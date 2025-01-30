@@ -14,7 +14,8 @@ dependencies:
   geocoding: ^2.0.4
   image_picker: ^0.8.7+3
   provider: ^6.1.2
-  flutter_svg: ^1.0.0 # Add this line
+  flutter_svg: ^1.0.0
+  google_maps_flutter: ^2.5.0
 
 
   firebase_auth: ^5.4.1
