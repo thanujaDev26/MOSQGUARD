@@ -14,6 +14,8 @@ dependencies:
   geocoding: ^2.0.4
   image_picker: ^0.8.7+3
   provider: ^6.1.2
+  flutter_svg: ^1.0.0 # Add this line
+
 
   firebase_auth: ^5.4.1
   google_sign_in: ^6.2.2
@@ -47,3 +49,7 @@ flutter:
     - assets/mosqguard/Logo-2.png
     - assets/mosqguard/Reporting Person.png
     - assets/mosqguard/Logo-3.png
+    - assets/mosqguard/status_1.svg
+    - assets/mosqguard/status_2.svg
+    - assets/mosqguard/status_3.svg
+    - assets/mosqguard/status_4.svg
