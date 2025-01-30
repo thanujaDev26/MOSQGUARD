@@ -31,17 +31,6 @@ class _OTPVerificationState extends State<OTPVerification> {
           child: Container(
             margin: const EdgeInsets.all(16.0),
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10.0,
-                  spreadRadius: 2.0,
-                ),
-              ],
-            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

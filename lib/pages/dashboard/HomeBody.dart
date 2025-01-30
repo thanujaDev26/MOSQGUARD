@@ -8,7 +8,6 @@ class CustomHome extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Cards Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
