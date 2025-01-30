@@ -13,7 +13,7 @@ class Sidebar extends StatelessWidget {
     return Drawer(
       backgroundColor: Colors.white,
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
             DrawerHeader(
