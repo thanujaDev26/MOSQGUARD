@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const StatusBody());
-}
-
 class StatusBody extends StatelessWidget {
   const StatusBody({super.key});
 
@@ -51,13 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        print("Clicked Plus Mark!");
+      },
       backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Container(
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          // shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(100),
           gradient: LinearGradient(
             colors: [
               Theme.of(context).colorScheme.secondary,
@@ -150,7 +149,7 @@ class ReportCard extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                  color: borderColor, width: 2), // Border color based on status
+                  color: borderColor, width: 2),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -282,6 +281,7 @@ class ReportCard extends StatelessWidget {
     );
   }
 }
+
 
 class ReportDetailsScreen extends StatelessWidget {
   const ReportDetailsScreen({super.key});
