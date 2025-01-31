@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
@@ -8,7 +9,6 @@ class CustomHome extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Cards Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -53,9 +53,7 @@ class CustomHome extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 16),
-
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -130,12 +128,21 @@ class CustomHome extends StatelessWidget {
               children: [
                 Container(
                   height: 200,
-                  color: Colors.grey[300],
-                  child: Center(
-                    child: Text(
-                      "Map Placeholder",
-                      style: TextStyle(color: Colors.black45),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+                      zoom: 12,
                     ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("default"),
+                        position: LatLng(37.7749, -122.4194),
+                        infoWindow: InfoWindow(title: "Reported Area"),
+                      ),
+                    },
                   ),
                 ),
                 SizedBox(height: 8),

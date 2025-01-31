@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mosqguard"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 34  // Update targetSdkVersion to 34
         versionCode 1
         versionName "1.0.0"

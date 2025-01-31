@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/Status/Status.dart';
 import '../capture/capture.dart';
 import 'package:mosqguard/pages/notification/Notification.dart';
 
 class CustomBottomBar extends StatelessWidget {
+  const CustomBottomBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -15,20 +18,39 @@ class CustomBottomBar extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
                 icon: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       print("object");
                     },
-                    child: Icon(Icons.grid_view)), label: ""
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
+                    child: Icon(Icons.grid_view)),
+                label: ""),
             BottomNavigationBarItem(
               icon: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Capture()));
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Status()));
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 10),
-                  child: Icon(Icons.add_circle, size: 70, color: Color(0xff002353),),
+                  child: Icon(
+                    Icons.bug_report,
+                  ),
+                ),
+              ),
+              label: "",
+            ),
+            BottomNavigationBarItem(
+              icon: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Capture()));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Icon(
+                    Icons.add_circle,
+                    size: 70,
+                    color: Color(0xff002353),
+                  ),
                 ),
               ),
               label: "",
