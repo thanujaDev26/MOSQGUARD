@@ -12,6 +12,8 @@ class Capture extends StatefulWidget {
 class _CaptureState extends State<Capture> {
   File? _capturedImage;
   final TextEditingController _captionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
 
   Future<void> _openCamera() async {
     final picker = ImagePicker();
@@ -29,12 +31,20 @@ class _CaptureState extends State<Capture> {
   Future<void> _sendImageToServer() async {
     if (_capturedImage != null) {
       final caption = _captionController.text.trim();
+      final location = _locationController.text.trim();
+      final notes = _notesController.text.trim();
+
       print("Sending image to server: ${_capturedImage!.path}");
       print("Caption: $caption");
-      // Clear the image and caption after sending
+      print("Location: $location");
+      print("Notes: $notes");
+
+      // Clear fields after sending
       setState(() {
         _capturedImage = null;
         _captionController.clear();
+        _locationController.clear();
+        _notesController.clear();
       });
     } else {
       print("No image to send.");
@@ -44,6 +54,8 @@ class _CaptureState extends State<Capture> {
   @override
   void dispose() {
     _captionController.dispose();
+    _locationController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -77,42 +89,43 @@ class _CaptureState extends State<Capture> {
                     height: 300,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 20),
+                  _buildTextField(_captionController, "Enter Your Name..."),
+                  _buildTextField(_locationController, "Enter Address..."),
+                  _buildTextField(_notesController, "Enter notes (if any)..."),
+                  const SizedBox(height: 15),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _captionController,
-                            decoration: InputDecoration(
-                              hintText: "Enter a caption...",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
+                    padding: const EdgeInsets.symmetric(horizontal: 85),
+                    child: ElevatedButton(
+                      onPressed: _sendImageToServer,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff002353),
+                        padding: const EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // Ensures the Row takes up minimal width
+                          mainAxisAlignment: MainAxisAlignment.center, // Centers the Row content
+                          children: [
+                            Text(
+                              "Submit",
+                              style: TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                            SizedBox(width: 8), // Add spacing between text and icon
+                            Transform.rotate(
+                              angle: -0.785398, // Rotate the icon
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
                               ),
-                              contentPadding: const EdgeInsets.all(10),
                             ),
-                          ),
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: _sendImageToServer,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff002353),
-                            padding: EdgeInsets.all(20),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          child: Transform.rotate(
-                            angle: -0.785398,
-                            child: Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -121,7 +134,7 @@ class _CaptureState extends State<Capture> {
                 "No image captured",
                 style: TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_capturedImage == null)
                 ElevatedButton(
                   onPressed: _openCamera,
@@ -131,13 +144,29 @@ class _CaptureState extends State<Capture> {
                     shape: const CircleBorder(),
                   ),
                   child: const Icon(
-                    Icons.add,
+                    Icons.add_a_photo,
                     size: 30,
                     color: Colors.white,
                   ),
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hintText) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: const EdgeInsets.all(10),
         ),
       ),
     );
