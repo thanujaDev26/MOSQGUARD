@@ -127,7 +127,7 @@ class CustomHome extends StatelessWidget {
           ),
           SizedBox(height: 16),
           // Map Section
-          //MapSection(),
+          MapSection(),
         ],
       ),
     );
