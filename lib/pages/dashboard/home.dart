@@ -1,42 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mosqguard/pages/capture/capture.dart';
-import 'package:mosqguard/pages/sidebar/sidebar.dart';
-import 'package:mosqguard/pages/status/status.dart';
+import '../sidebar/sidebar.dart';
+import '../Appbar/Footer.dart';
+import '../Appbar/Header.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: Colors.black, size: 30),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/mosqguard/Logo-3.png',
-              width: 150,
-            ),
-          ],
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.list, color: Colors.black, size: 30),
-            onPressed: () {},
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -187,46 +158,7 @@ class Home extends StatelessWidget {
         ),
       ),
       drawer: Sidebar(),
-      bottomNavigationBar: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            items: [
-              BottomNavigationBarItem(
-                  icon: GestureDetector(
-                      onTap: (){
-                        print("object");
-                      },
-                      child: Icon(Icons.grid_view)), label: ""
-              ),
-              BottomNavigationBarItem(
-                  icon: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Status()));
-                      },
-                      child: Icon(Icons.bug_report)), label: ""
-              ),
-              BottomNavigationBarItem(
-                icon: GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Capture()));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Icon(Icons.add_circle, size: 70, color: Color(0xff002353),),
-                  ),
-                ),
-                label: "",
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.notifications), label: ""),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-            ],
-          ),
-        ],
-      ),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
