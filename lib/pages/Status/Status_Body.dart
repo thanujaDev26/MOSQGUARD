@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mosqguard/utils/theme_notifier.dart';
 
 class StatusBody extends StatelessWidget {
   const StatusBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mosquard',
@@ -35,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           _buildReportsList(),
