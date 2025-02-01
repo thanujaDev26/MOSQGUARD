@@ -19,43 +19,60 @@ class _MapSectionState extends State<MapSection> {
   }
 
   Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
 
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Show error if GPS is off
-      print("Location services are disabled.");
-      return;
-    }
-
-    // Check location permission status
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print("Location permissions are denied");
+      // Check if location services are enabled
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print("⚠️ Location services are disabled.");
+        _showErrorMessage("Location services are disabled.");
         return;
       }
+
+      // Check location permission status
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print("⚠️ Location permissions are denied.");
+          _showErrorMessage("Location permissions are denied.");
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print("🚫 Location permissions are permanently denied.");
+        _showErrorMessage("Location permissions are permanently denied. Enable from settings.");
+        return;
+      }
+
+      // Get current location
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _currentPosition = LatLng(position.latitude, position.longitude); // ✅ Uses correct LatLng
+      });
+
+      _mapController?.animateCamera(CameraUpdate.newLatLng(_currentPosition!));
+    } catch (e) {
+      print("❌ Error getting location: $e");
+      _showErrorMessage("Error getting location. Please check your GPS or try again.");
     }
-
-    if (permission == LocationPermission.deniedForever) {
-      print("Location permissions are permanently denied.");
-      return;
-    }
-
-    // Get current location
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    setState(() {
-      _currentPosition = LatLng(position.latitude, position.longitude);
-    });
-
-    _mapController?.animateCamera(CameraUpdate.newLatLng(_currentPosition!));
   }
+
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +86,7 @@ class _MapSectionState extends State<MapSection> {
               border: Border.all(color: Colors.grey),
             ),
             child: _currentPosition == null
-                ? Center(child: Text("Loading map..."))
+                ? Center(child: Text("⚠️ Location not available."))
                 : GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: _currentPosition!,
