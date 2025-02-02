@@ -86,25 +86,22 @@ class AboutUsPage extends StatelessWidget {
             _buildSectionTitle('Our Services'),
             const SizedBox(height: 8),
             _buildServiceTile(
-              Icons.bug_report,
-              'Real-Time Mosquito Detection',
-              'Advanced sensors monitor mosquito activity and provide real-time alerts for high-risk areas.',
+              Icons.videocam, // Better for surveillance
+              'Real-time Surveillance',
             ),
             _buildServiceTile(
-              Icons.map,
-              'Risk Zone Mapping',
-              'Heatmaps visualize mosquito-prone areas, helping communities take preventive action.',
+              Icons.insights, // Represents data analysis
+              'Predictive Analytics',
             ),
             _buildServiceTile(
-              Icons.notifications_active,
-              'Smart Notifications & Alerts',
-              'Get instant notifications about mosquito density changes and suggested countermeasures.',
+              Icons.people, // Represents community interaction
+              'Community Engagement',
             ),
             _buildServiceTile(
-              Icons.analytics,
-              'Data-Driven Insights',
-              'AI-powered analytics provide trends and forecasts, enabling long-term disease prevention strategies.',
+              Icons.web, // Represents web
+              'Web Application',
             ),
+
             const SizedBox(height: 20),
 
             // Contact Us Section
@@ -187,10 +184,10 @@ class AboutUsPage extends StatelessWidget {
   }
 
   // Widget for service items
-  Widget _buildServiceTile(IconData icon, String title, String description) {
+  Widget _buildServiceTile(IconData icon, String title,) {
     return Card(
       elevation: 3,
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: Colors.white,
       shadowColor: Colors.black26,
@@ -200,10 +197,6 @@ class AboutUsPage extends StatelessWidget {
           title,
           style: const TextStyle(
               fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-        subtitle: Text(
-          description,
-          style: TextStyle(color: Colors.grey[800]),
         ),
       ),
     );
