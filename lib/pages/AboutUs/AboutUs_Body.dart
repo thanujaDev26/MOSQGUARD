@@ -70,23 +70,6 @@ class AboutUsPage extends StatelessWidget {
               _buildServiceTile(context, Icons.insights, 'Predictive Analytics'),
               _buildServiceTile(context, Icons.people, 'Community Engagement'),
               _buildServiceTile(context, Icons.web, 'Web Application'),
-
-              const SizedBox(height: 20),
-
-              // Contact Us Section
-              _buildCardSection(
-                context,
-                title: 'Contact Us',
-                icon: Icons.contact_mail_outlined,
-                content: '',
-                child: Column(
-                  children: [
-                    _buildContactButton(Icons.email, 'support@mosqguard.com', 'mailto:support@mosqguard.com'),
-                    _buildContactButton(Icons.language, 'www.mosqguard.com', 'https://www.mosqguard.com'),
-                    _buildContactButton(Icons.phone, '+123 456 7890', 'tel:+1234567890'),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
@@ -195,35 +178,5 @@ class AboutUsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  // Contact Button Widget
-  Widget _buildContactButton(IconData icon, String text, String url) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            padding: const EdgeInsets.symmetric(vertical: 10),
-          ),
-          icon: Icon(icon, color: Colors.white),
-          label: SelectableText(text, style: const TextStyle(color: Colors.white)), // Allows copy-pasting
-          onPressed: () => _launchURL(url),
-        ),
-      ),
-    );
-  }
-
-  // URL Launcher Function
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      debugPrint('Could not launch $url');
-    }
   }
 }

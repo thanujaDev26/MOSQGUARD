@@ -75,7 +75,9 @@ class Sidebar extends StatelessWidget {
                       'Contact Us',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/contactus');
+                    },
                   ),
                 ],
               ),
