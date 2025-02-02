@@ -11,9 +11,9 @@ class Sidebar extends StatelessWidget {
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
             DrawerHeader(
@@ -34,12 +34,12 @@ class Sidebar extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Thanuja Priyadarshane',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      color: isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -53,17 +53,26 @@ class Sidebar extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.lightbulb, color: Colors.amber),
-                    title: const Text('About Us'),
+                    title: Text(
+                      'About Us',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
                     onTap: () {},
                   ),
                   ListTile(
-                    leading: const Icon(Icons.security, color: Colors.black),
-                    title: const Text('Privacy and Policy'),
+                    leading: Icon(Icons.security, color: isDarkMode ? Colors.white : Colors.black),
+                    title: Text(
+                      'Privacy and Policy',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
                     onTap: () {},
                   ),
                   ListTile(
                     leading: const Icon(Icons.phone, color: Colors.green),
-                    title: const Text('Contact Us'),
+                    title: Text(
+                      'Contact Us',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
                     onTap: () {},
                   ),
                 ],
@@ -77,22 +86,34 @@ class Sidebar extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.help, color: Colors.blue),
-                    title: const Text('Help'),
+                    title: Text(
+                      'Help',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
                     onTap: () {},
                   ),
                   SwitchListTile(
                     value: isDarkMode,
-                    activeColor: Colors.black,
+                    activeColor: isDarkMode ? Colors.white : Colors.black, // Change thumb color
                     inactiveThumbColor: Colors.grey,
-                    title: const Text('Dark Mode'),
-                    secondary: const Icon(Icons.dark_mode, color: Colors.black),
+                    title: Text(
+                      'Dark Mode',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
+                    secondary: Icon(
+                      Icons.dark_mode,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                    ),
                     onChanged: (bool value) {
                       themeNotifier.toggleTheme(value);
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout, color: Colors.orange),
-                    title: const Text('Log Out'),
+                    title: Text(
+                      'Log Out',
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                    ),
                     onTap: () {},
                   ),
                 ],
