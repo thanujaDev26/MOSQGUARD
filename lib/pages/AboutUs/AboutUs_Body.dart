@@ -1,155 +1,150 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mosqguard/utils/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // App Logo
-            Hero(
-              tag: 'app_logo',
-              child: Image.asset(
-                'assets/icons/App_Icon.png',
-                height: 120,
-              ),
-            ),
-            const SizedBox(height: 16),
+    final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
-            // App Name
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'MOS',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // App Logo with Hero Animation
+              Hero(
+                tag: 'app_logo',
+                child: Image.asset(
+                  'assets/icons/App_Icon.png',
+                  height: 120,
                 ),
-                Text(
-                  'Q',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                Text(
-                  'GUARD',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            // App Tagline
-            Text(
-              'Smart Mosquito Monitoring & Control System',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontStyle: FontStyle.italic,
-                color: Colors.grey[600],
               ),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-            // Mission Section
-            _buildCardSection(
-              title: 'Our Mission',
-              icon: Icons.shield_outlined,
-              content:
-              'To safeguard communities from mosquito-borne diseases through real-time '
-                  'monitoring and data-driven prevention strategies, creating a healthier and safer environment.',
-            ),
+              // App Name
+              _buildAppTitle(context, isDarkMode),
 
-            // Vision Section
-            _buildCardSection(
-              title: 'Our Vision',
-              icon: Icons.visibility_outlined,
-              content:
-              'To be the leading technological solution for mosquito control, leveraging smart devices and AI '
-                  'to predict and prevent outbreaks before they happen.',
-            ),
+              const SizedBox(height: 8),
 
-            // Services Section
-            const SizedBox(height: 16),
-            _buildSectionTitle('Our Services'),
-            const SizedBox(height: 8),
-            _buildServiceTile(
-              Icons.videocam, // Better for surveillance
-              'Real-time Surveillance',
-            ),
-            _buildServiceTile(
-              Icons.insights, // Represents data analysis
-              'Predictive Analytics',
-            ),
-            _buildServiceTile(
-              Icons.people, // Represents community interaction
-              'Community Engagement',
-            ),
-            _buildServiceTile(
-              Icons.web, // Represents web
-              'Web Application',
-            ),
-
-            const SizedBox(height: 20),
-
-            // Contact Us Section
-            _buildCardSection(
-              title: 'Contact Us',
-              icon: Icons.contact_mail_outlined,
-              content: '',
-              child: Column(
-                children: [
-                  _buildContactButton(Icons.email, 'support@mosqguard.com',
-                      'mailto:support@mosqguard.com'),
-                  _buildContactButton(Icons.language, 'www.mosqguard.com',
-                      'https://www.mosqguard.com'),
-                  _buildContactButton(Icons.phone, '+123 456 7890',
-                      'tel:+1234567890'),
-                ],
+              // App Tagline
+              Text(
+                'Smart Mosquito Monitoring & Control System',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  color: isDarkMode ? Colors.grey[200] : Colors.grey[600],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+
+              // Mission Section
+              _buildCardSection(
+                context,
+                title: 'Our Mission',
+                icon: Icons.shield_outlined,
+                content:
+                'Our mission is to use advanced technology to prevent and control dengue fever, creating healthier communities through real-time surveillance, predictive analytics, and community engagement.',
+              ),
+
+              // Vision Section
+              _buildCardSection(
+                context,
+                title: 'Our Vision',
+                icon: Icons.visibility_outlined,
+                content:
+                'Our vision is a dengue-free world. We strive to achieve this through continuous innovation, collaboration with health organizations and governments, and community engagement in combating dengue.',
+              ),
+
+              // Services Section
+              const SizedBox(height: 16),
+              _buildSectionTitle(context, 'Our Services'),
+              const SizedBox(height: 8),
+              _buildServiceTile(context, Icons.videocam, 'Real-time Surveillance'),
+              _buildServiceTile(context, Icons.insights, 'Predictive Analytics'),
+              _buildServiceTile(context, Icons.people, 'Community Engagement'),
+              _buildServiceTile(context, Icons.web, 'Web Application'),
+
+              const SizedBox(height: 20),
+
+              // Contact Us Section
+              _buildCardSection(
+                context,
+                title: 'Contact Us',
+                icon: Icons.contact_mail_outlined,
+                content: '',
+                child: Column(
+                  children: [
+                    _buildContactButton(Icons.email, 'support@mosqguard.com', 'mailto:support@mosqguard.com'),
+                    _buildContactButton(Icons.language, 'www.mosqguard.com', 'https://www.mosqguard.com'),
+                    _buildContactButton(Icons.phone, '+123 456 7890', 'tel:+1234567890'),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Widget for section title
-  Widget _buildSectionTitle(String title) {
+  // App Title with Highlighted 'Q'
+  Widget _buildAppTitle(BuildContext context, bool isDarkMode) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'MOS',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        Text(
+          'Q',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        Text(
+          'GUARD',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section Title Widget
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        color: Colors.black87,
+        color: isDarkMode ? Colors.white : Colors.black,
       ),
     );
   }
 
-  // Widget for sections with cards
-  Widget _buildCardSection({
-    required String title,
-    required IconData icon,
-    required String content,
-    Widget? child,
-  }) {
+  // Card Section Widget
+  Widget _buildCardSection(BuildContext context, {required String title, required IconData icon, required String content, Widget? child}) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.white,
+      color: isDarkMode ? Colors.black : Colors.white,
       shadowColor: Colors.black26,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -161,10 +156,10 @@ class AboutUsPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
               ],
@@ -174,7 +169,7 @@ class AboutUsPage extends StatelessWidget {
               Text(
                 content,
                 textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.grey[200] : Colors.grey[800]),
               ),
             if (child != null) child,
           ],
@@ -183,31 +178,31 @@ class AboutUsPage extends StatelessWidget {
     );
   }
 
-  // Widget for service items
-  Widget _buildServiceTile(IconData icon, String title,) {
+  // Service Tile Widget
+  Widget _buildServiceTile(BuildContext context, IconData icon, String title) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.white,
+      color: isDarkMode ? Colors.black : Colors.white,
       shadowColor: Colors.black26,
       child: ListTile(
         leading: Icon(icon, color: Colors.blueAccent, size: 32),
         title: Text(
           title,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black87),
+          style: TextStyle(fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 
-  // Contact Buttons
+  // Contact Button Widget
   Widget _buildContactButton(IconData icon, String text, String url) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16), // Added horizontal margin
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       child: SizedBox(
-        width: double.infinity, // Expands within the padded area
+        width: double.infinity,
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blueAccent,
@@ -215,10 +210,20 @@ class AboutUsPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10),
           ),
           icon: Icon(icon, color: Colors.white),
-          label: Text(text, style: const TextStyle(color: Colors.white)),
-          onPressed: () => launchUrl(Uri.parse(url)),
+          label: SelectableText(text, style: const TextStyle(color: Colors.white)), // Allows copy-pasting
+          onPressed: () => _launchURL(url),
         ),
       ),
     );
+  }
+
+  // URL Launcher Function
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      debugPrint('Could not launch $url');
+    }
   }
 }
