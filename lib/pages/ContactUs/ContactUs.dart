@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'ContactUs_Body.dart';
+import 'ContactUs_Form.dart';
 
 class Contactus extends StatelessWidget {
   const Contactus({super.key});
@@ -17,7 +18,13 @@ class Contactus extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: ContactUsPage(),
+      body: SingleChildScrollView(
+        child: Column(children: [
+            ContactUsForm(),
+            ContactUsBody(),
+          ],
+        ),
+      ),
     );
   }
 }
