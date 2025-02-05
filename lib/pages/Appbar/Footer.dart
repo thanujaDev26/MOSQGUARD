@@ -4,6 +4,7 @@ import '../capture/capture.dart';
 import '../notification/Notification.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
+import '../profile/mainProfilePage.dart';
 
 class CustomBottomBar extends StatelessWidget {
   const CustomBottomBar({super.key});
@@ -29,6 +30,9 @@ class CustomBottomBar extends StatelessWidget {
                     },
                     child: Icon(Icons.grid_view)),
                 label: ""),
+
+            BottomNavigationBarItem(icon: Icon(Icons.bug_report), label: ""),
+
             BottomNavigationBarItem(
                 icon: GestureDetector(
                     onTap: (){
@@ -36,6 +40,7 @@ class CustomBottomBar extends StatelessWidget {
                     },
                     child: Icon(Icons.bug_report)), label: ""
             ),
+
             BottomNavigationBarItem(
               icon: GestureDetector(
                 onTap: () {
@@ -53,21 +58,22 @@ class CustomBottomBar extends StatelessWidget {
               ),
               label: "",
             ),
-            BottomNavigationBarItem(icon: GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationPage()),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Icon(Icons.notifications),
+            BottomNavigationBarItem(icon: Icon(Icons.notifications), label: ""),
+            BottomNavigationBarItem(
+              icon: GestureDetector(
+                onTap: () {
+                  // Navigate to mainprofile.dart when the person icon is tapped
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MainProfilePage()), // Navigate to mainprofile
+                  );
+                },
+                child: Icon(Icons.person),
               ),
+              label: "",
             ),
-                label: ""
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
           ],
         ),
       ],
