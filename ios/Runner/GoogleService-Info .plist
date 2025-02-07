@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>517864868865-vs28117sr0q0bmnggk8dpqanivq7bmm9.apps.googleusercontent.com</string>
+	<string>90352497684-c9oduda1obeqir3i6l4ahqaje1d20cbb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.517864868865-vs28117sr0q0bmnggk8dpqanivq7bmm9</string>
+	<string>com.googleusercontent.apps.90352497684-c9oduda1obeqir3i6l4ahqaje1d20cbb</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBN6iDwALREDdYG6T58PteKypHSHMbOlns</string>
+	<string>AIzaSyDuIfiTG_-Wm23C-Ly7Br40n2twyAfNuTk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>517864868865</string>
+	<string>90352497684</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.mosqguard</string>
+	<string>com.thanuja.mosqguard</string>
 	<key>PROJECT_ID</key>
-	<string>mosqguard-d17dd</string>
+	<string>mosqguard-75061</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mosqguard-d17dd.firebasestorage.app</string>
+	<string>mosqguard-75061.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:517864868865:ios:7107624842a2ea822b8400</string>
+	<string>1:90352497684:ios:e3ed2675fed82e52de6301</string>
 </dict>
 </plist>
