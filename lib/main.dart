@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: themeNotifier.themeMode,
+      theme: ThemeData.light(),  // Light Mode Theme
+      darkTheme: ThemeData.dark(), // Dark Mode Theme
+      themeMode: themeNotifier.themeMode, // Uses selected theme
       home: const Splash(),
     );
   }

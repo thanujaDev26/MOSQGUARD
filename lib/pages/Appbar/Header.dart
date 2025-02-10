@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mosqguard/pages/Appbar/Drawer.dart';
+import 'package:provider/provider.dart';
+import 'package:mosqguard/utils/theme_notifier.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
+      iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
+      titleTextStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
       automaticallyImplyLeading: false, // Remove default back button
       elevation: 0,
       title: Column(
@@ -22,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.black),
+                    icon: Icon(Icons.menu, color: isDarkMode ? Colors.white : Colors.black),
                     onPressed: () {
                       // Open the end drawer (ensuring the scaffold context is found properly)
                       Scaffold.maybeOf(context)?.openDrawer();
@@ -30,10 +36,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   const SizedBox(width: 8),
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text: 'MOS',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -49,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         TextSpan(
                           text: 'GUARD',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isDarkMode ? Colors.white : Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
@@ -61,7 +67,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               // Right section: News icon
               IconButton(
-                icon: const Icon(Icons.article, color: Colors.black),
+                icon: Icon(Icons.article, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   // Action for news button
                   debugPrint('News button clicked');

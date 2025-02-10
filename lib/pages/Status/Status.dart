@@ -5,15 +5,22 @@ import 'package:mosqguard/pages/Status/Status_body.dart';
 import 'package:mosqguard/pages/Appbar/Drawer.dart';
 import 'package:mosqguard/pages/sidebar/sidebar.dart';
 import 'package:mosqguard/pages/sidebar/sidebar.dart';
+import 'package:provider/provider.dart';
+import 'package:mosqguard/utils/theme_notifier.dart';
 
 class Status extends StatelessWidget {
   const Status({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
+          titleTextStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
           elevation: 0,
           // leading: Builder(
           //   builder: (context) => IconButton(
