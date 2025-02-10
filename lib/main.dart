@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeNotifier(),
