@@ -4,7 +4,8 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     // Removed Google Services plugin since Firebase is not being used
-    id "dev.flutter.flutter-gradle-plugin"  // Flutter Gradle Plugin
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 android {
