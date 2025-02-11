@@ -71,7 +71,9 @@ class Sidebar extends StatelessWidget {
                       'About Us',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/aboutus');
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.security, color: isDarkMode ? Colors.white : Colors.black),
@@ -87,7 +89,9 @@ class Sidebar extends StatelessWidget {
                       'Contact Us',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/contactus');
+                    },
                   ),
                 ],
               ),

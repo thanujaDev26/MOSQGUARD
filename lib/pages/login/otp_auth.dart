@@ -48,7 +48,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                   children: List.generate(
                     6,
                         (index) => SizedBox(
-                      width: 50,
+                      width: 40,
                       height: 60,
                       child: TextField(
                         controller: _controllers[index],
