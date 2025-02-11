@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
@@ -130,20 +130,21 @@ class CustomHome extends StatelessWidget {
                   height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[200],
                   ),
-                  child: GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-                      zoom: 12,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: MarkerId("default"),
-                        position: LatLng(37.7749, -122.4194),
-                        infoWindow: InfoWindow(title: "Reported Area"),
-                      ),
-                    },
-                  ),
+                  // child: GoogleMap(
+                  //   initialCameraPosition: CameraPosition(
+                  //     target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+                  //     zoom: 12,
+                  //   ),
+                  //   markers: {
+                  //     Marker(
+                  //       markerId: MarkerId("default"),
+                  //       position: LatLng(37.7749, -122.4194),
+                  //       infoWindow: InfoWindow(title: "Reported Area"),
+                  //     ),
+                  //   },
+                  // ),
                 ),
                 SizedBox(height: 8),
                 Row(
