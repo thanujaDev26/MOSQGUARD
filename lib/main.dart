@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/AboutUs/AboutUs.dart';
 import 'package:mosqguard/pages/ContactUs/ContactUs.dart';
@@ -5,7 +6,9 @@ import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeNotifier(),
@@ -23,9 +26,9 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),  // Light Mode Theme
-      darkTheme: ThemeData.dark(), // Dark Mode Theme
-      themeMode: themeNotifier.themeMode, // Uses selected theme
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeNotifier.themeMode,
       home: const Splash(),
       routes: <String, WidgetBuilder>{
         '/aboutus': (context)=>Aboutus(),

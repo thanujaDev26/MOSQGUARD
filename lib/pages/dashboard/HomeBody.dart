@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'map.dart';
-
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
 
@@ -11,7 +9,6 @@ class CustomHome extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Cards Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -56,9 +53,7 @@ class CustomHome extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 16),
-
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -127,10 +122,86 @@ class CustomHome extends StatelessWidget {
           ),
           SizedBox(height: 16),
           // Map Section
-          MapSection(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(37.7749, -122.4194),
+                      zoom: 12,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("default"),
+                        position: LatLng(37.7749, -122.4194),
+                        infoWindow: InfoWindow(title: "Reported Area"),
+                      ),
+                    },
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildLegendItem("Reported Area", Colors.red),
+                    _buildLegendItem("On Progress", Colors.green),
+                    _buildLegendItem("Rejected", Colors.black),
+                    _buildLegendItem("Completed", Colors.yellow),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
+class LegendItem extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const LegendItem({
+    required this.color,
+    required this.label,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+}
+
+Widget _buildLegendItem(String label, Color color) {
+  return Row(
+    children: [
+      CircleAvatar(
+        radius: 6,
+        backgroundColor: color,
+      ),
+      SizedBox(width: 4),
+      Text(label, style: TextStyle(fontSize: 12)),
+    ],
+  );
+}

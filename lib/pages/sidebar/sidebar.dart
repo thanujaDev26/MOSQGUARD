@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/auth/auth.dart';
+import 'package:mosqguard/pages/login/login.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({Key? key}) : super(key: key);
 
+  void _signOut(BuildContext context) async {
+    AuthService().signOut();
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    final String userName = AuthService().getCurrentUser()?.displayName ?? "Guest";
 
     return Drawer(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
@@ -35,7 +49,7 @@ class Sidebar extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Thanuja Priyadarshane',
+                    userName, // Now this will work!
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -118,7 +132,7 @@ class Sidebar extends StatelessWidget {
                       'Log Out',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {},
+                    onTap: () => _signOut(context),
                   ),
                 ],
               ),
@@ -129,3 +143,4 @@ class Sidebar extends StatelessWidget {
     );
   }
 }
+

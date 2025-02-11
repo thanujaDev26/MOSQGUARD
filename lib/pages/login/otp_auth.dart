@@ -85,7 +85,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14.0),
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Color(0xff004DB9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -108,7 +108,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,
+                      color: Color(0xff004DB9),
                     ),
                   ),
                 ),

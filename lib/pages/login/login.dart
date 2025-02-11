@@ -1,10 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:mosqguard/authentications/google_auth.dart';
+import 'package:mosqguard/auth/auth.dart';
 import 'package:mosqguard/pages/dashboard/home.dart';
 import 'package:mosqguard/pages/login/otp_auth.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool _isLoading = false;
+
+  void _signAnonymously(BuildContext context) async{
+    try{
+      await AuthService().signinInAnonymously();
+      if(context.mounted){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+      }
+    }
+    catch(error){
+      print("Error signing in anonymously: ${error}");
+    }
+  }
+
+  Future<void> _signInWithGoogle () async{
+    setState(() {
+      _isLoading = true;
+    });
+    try{
+      await AuthService().signinWithGoogle();
+      if(context.mounted){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+      }
+    }
+    catch(error){
+      showDialog(context: context,
+          builder: (context)=> AlertDialog(
+            title: Text("Error"),
+            content: Text("Error Signing in with Google: $error"),
+            actions: [
+              TextButton(onPressed: ()=>Navigator.of(context).pop(),
+                  child: Text("OK"))
+            ],
+          )
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +62,7 @@ class Login extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(16.0),
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
             ),
             child: Column(
@@ -74,10 +118,9 @@ class Login extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      print("Clicked");
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => (OTPVerification())),
+                        MaterialPageRoute(builder: (context) => OTPVerification()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -87,13 +130,9 @@ class Login extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Continue',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                 ),
@@ -113,29 +152,24 @@ class Login extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   child: Column(
                     children: [
-                      GestureDetector(
-                        onTap: (){
-                          AuthMethods().signInWithGoogle(context);
-                        },
-                        child: SocialButton(
-                          icon: "assets/icons/google.png",
-                          label: 'Continue with Google',
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
+
                       SocialButton(
-                        icon: "assets/icons/apple-logo.png",
-                        label: 'Continue with Apple',
+                        icon: "assets/icons/guest-icon.png",
+                        label: 'Continue as Guest',
+                        onPressed: ()=> _signAnonymously(context),
                       ),
-                      SizedBox(height: 20.0),
-                      SocialButton(
-                        icon: "assets/icons/facebook.png",
-                        label: 'Continue with Facebook',
+                      const SizedBox(height: 20.0),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : SocialButton(
+                        icon: "assets/icons/google.png",
+                        label: 'Continue with Google',
+                        onPressed: ()=>_signInWithGoogle,
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -148,15 +182,21 @@ class Login extends StatelessWidget {
 class SocialButton extends StatelessWidget {
   final String icon;
   final String label;
+  final VoidCallback onPressed;
 
-  const SocialButton({required this.icon, required this.label});
+  const SocialButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Image.asset(
           icon,
           width: 24,
@@ -168,7 +208,7 @@ class SocialButton extends StatelessWidget {
         ),
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12.0),
-          side: BorderSide(color: Colors.black),
+          side: const BorderSide(color: Colors.black),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

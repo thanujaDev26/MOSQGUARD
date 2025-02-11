@@ -21,10 +21,11 @@ dependencies:
   google_maps_flutter: ^2.5.0
   url_launcher: ^6.1.14
 
-  firebase_auth: ^5.4.1
+  firebase_auth: ^5.4.2
   google_sign_in: ^6.2.2
   cloud_firestore: ^5.6.2
-  shared_preferences: ^2.2.2  # Check latest version on pub.dev
+  shared_preferences: ^2.2.2
+  firebase_core: ^3.11.0
 
 
 dev_dependencies:
@@ -49,6 +50,7 @@ flutter:
     - assets/icons/apple-logo.png
     - assets/icons/facebook.png
     - assets/icons/google.png
+    - assets/icons/guest-icon.png
     - assets/icons/sri-lanka.png
     - assets/mosqguard/Logo-1.png
     - assets/mosqguard/Logo-2.png
