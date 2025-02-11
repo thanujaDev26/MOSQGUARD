@@ -18,10 +18,10 @@ dependencies:
   google_maps_flutter: ^2.5.0
 
 
-  firebase_auth: ^5.4.1
+  firebase_auth: ^5.4.2
   google_sign_in: ^6.2.2
   cloud_firestore: ^5.6.2
-  shared_preferences: ^2.2.2  # Check latest version on pub.dev
+  shared_preferences: ^2.2.2
   firebase_core: ^3.11.0
 
 

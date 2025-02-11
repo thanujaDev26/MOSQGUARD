@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/auth/auth.dart';
+import 'package:mosqguard/pages/login/login.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({Key? key}) : super(key: key);
+
+  void _signOut(BuildContext context) async{
+    AuthService().signOut();
+
+    if(context.mounted){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +124,7 @@ class Sidebar extends StatelessWidget {
                       'Log Out',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {},
+                    onTap: ()=>_signOut(context),
                   ),
                 ],
               ),

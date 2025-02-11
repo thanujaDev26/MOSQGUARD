@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeNotifier(),
@@ -24,9 +24,9 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),  // Light Mode Theme
-      darkTheme: ThemeData.dark(), // Dark Mode Theme
-      themeMode: themeNotifier.themeMode, // Uses selected theme
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeNotifier.themeMode,
       home: const Splash(),
     );
   }
