@@ -50,3 +50,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 }
 
+apply plugin: 'com.google.gms.google-services' // Add this line to the end of the file
+
