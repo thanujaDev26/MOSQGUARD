@@ -7,11 +7,14 @@ import 'package:provider/provider.dart';
 class Sidebar extends StatelessWidget {
   const Sidebar({Key? key}) : super(key: key);
 
-  void _signOut(BuildContext context) async{
+  void _signOut(BuildContext context) async {
     AuthService().signOut();
 
-    if(context.mounted){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
     }
   }
 
@@ -19,6 +22,7 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    final String userName = AuthService().getCurrentUser()?.displayName ?? "Guest";
 
     return Drawer(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
@@ -45,7 +49,7 @@ class Sidebar extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Thanuja Priyadarshane',
+                    userName, // Now this will work!
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -124,7 +128,7 @@ class Sidebar extends StatelessWidget {
                       'Log Out',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: ()=>_signOut(context),
+                    onTap: () => _signOut(context),
                   ),
                 ],
               ),
@@ -135,3 +139,4 @@ class Sidebar extends StatelessWidget {
     );
   }
 }
+

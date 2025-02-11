@@ -6,8 +6,6 @@ import 'package:mosqguard/pages/login/otp_auth.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
-  // final _formKey = GlobalKey<FormState>();
-
   @override
   _LoginState createState() => _LoginState();
 }
@@ -154,20 +152,19 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   child: Column(
                     children: [
+
+                      SocialButton(
+                        icon: "assets/icons/guest-icon.png",
+                        label: 'Continue as Guest',
+                        onPressed: ()=> _signAnonymously(context),
+                      ),
+                      const SizedBox(height: 20.0),
                       _isLoading
                           ? const CircularProgressIndicator()
                           : SocialButton(
                         icon: "assets/icons/google.png",
                         label: 'Continue with Google',
-                        onPressed: ()=> _signInWithGoogle,
-                      ),
-                      const SizedBox(height: 20.0),
-                      SocialButton(
-                        icon: "assets/icons/apple-logo.png",
-                        label: 'Continue with Apple',
-                        onPressed: () {
-                          // Apple sign-in logic
-                        },
+                        onPressed: ()=>_signInWithGoogle,
                       ),
                       const SizedBox(height: 20.0),
                     ],

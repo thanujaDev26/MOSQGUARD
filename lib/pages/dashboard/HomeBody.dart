@@ -133,7 +133,7 @@ class CustomHome extends StatelessWidget {
                   ),
                   child: GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(37.7749, -122.4194), // San Francisco coordinates
+                      target: LatLng(37.7749, -122.4194),
                       zoom: 12,
                     ),
                     markers: {
