@@ -75,19 +75,4 @@ class AuthService {
     }
   }
 
-
-  Future<void> signInWithApple () async{
-    try{
-
-    }
-    on FirebaseAuthException catch (error){
-      print("Error signing in anonymously: ${mapFirebaseAuthExceptionCodes(error.code)}");
-      throw Exception(mapFirebaseAuthExceptionCodes(error.code));
-    }
-
-    catch(error){
-      print("Error signing out: $error");
-    }
-  }
-
 }
