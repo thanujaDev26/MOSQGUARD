@@ -7,6 +7,8 @@ import 'package:mosqguard/execptions/auth_exceptions.dart';
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  String? _verificationId;
+
   //Anonymous Login
   Future<void> signinInAnonymously() async{
     try{
@@ -48,7 +50,7 @@ class AuthService {
     }
   }
 
-
+//Google signin
   Future<void> signinWithGoogle () async{
     try{
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -62,7 +64,7 @@ class AuthService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      
+
       await _firebaseAuth.signInWithCredential(credential);
     }
     on FirebaseAuthException catch (error){
@@ -74,5 +76,60 @@ class AuthService {
       print("Error signing out: $error");
     }
   }
+
+
+  //Phone OTP send eka
+  Future<void> sendOTP(String phoneNumber, Function onCodeSent) async {
+    String formattedPhoneNumber = phoneNumber;
+    print(formattedPhoneNumber);
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: formattedPhoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _firebaseAuth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print("Verification failed: \${e.message}");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          _verificationId = verificationId;
+          onCodeSent();
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          _verificationId = verificationId;
+        },
+      );
+    }
+
+    on FirebaseAuthException catch (error){
+      print("Error signing in anonymously: ${mapFirebaseAuthExceptionCodes(error.code)}");
+      throw Exception(mapFirebaseAuthExceptionCodes(error.code));
+    }
+
+    catch (error) {
+      print("Error sending OTP: \$error");
+    }
+  }
+
+
+  //Verify the OTP
+  Future<bool> verifyOTP(String smsCode) async {
+    try {
+      if (_verificationId == null) {
+        print("Error: Verification ID is null.");
+        return false;
+      }
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!,
+        smsCode: smsCode,
+      );
+      await _firebaseAuth.signInWithCredential(credential);
+      return true;
+    } catch (error) {
+      print("Error verifying OTP: \$error");
+      return false;
+    }
+  }
+
 
 }

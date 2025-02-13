@@ -12,6 +12,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isLoading = false;
+  final TextEditingController _phoneController = TextEditingController();
+
 
   void _signAnonymously(BuildContext context) async{
     try{
@@ -46,6 +48,25 @@ class _LoginState extends State<Login> {
       );
     }
   }
+
+  void _sendOTP() {
+    String phoneNumber = _phoneController.text.trim();
+    if (phoneNumber.isEmpty || phoneNumber.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Enter a valid phone number")),
+      );
+      return;
+    }
+    AuthService().sendOTP(phoneNumber, () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OTPVerification(phoneNumber: phoneNumber),
+        ),
+      );
+    });
+  }
+
 
 
   @override
@@ -99,9 +120,10 @@ class _LoginState extends State<Login> {
                     const SizedBox(width: 10.0),
                     Expanded(
                       child: TextField(
+                        controller: _phoneController,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
-                          hintText: '+94 778632148',
+                          hintText: '0778632148',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
@@ -114,13 +136,7 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OTPVerification()),
-                      );
-                    },
+                    onPressed: () =>_sendOTP(),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       backgroundColor: const Color(0xff004DB9),

@@ -1,18 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/auth/auth.dart';
 import 'package:mosqguard/pages/dashboard/home.dart';
+import 'dart:async';
 
 class OTPVerification extends StatefulWidget {
-  const OTPVerification({super.key});
+  final String phoneNumber;
+
+  const OTPVerification({super.key, required this.phoneNumber});
 
   @override
   _OTPVerificationState createState() => _OTPVerificationState();
 }
 
 class _OTPVerificationState extends State<OTPVerification> {
-  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers =
+  List.generate(6, (index) => TextEditingController());
+  bool _isResendAvailable = true;
+  late Timer _resendTimer;
+
+  // Timer for Resend OTP
+  void _startResendTimer() {
+    setState(() {
+      _isResendAvailable = false;
+    });
+    _resendTimer = Timer(Duration(seconds: 30), () {
+      setState(() {
+        _isResendAvailable = true;
+      });
+    });
+  }
+
+  // Concatenate the OTP digits from all controllers
+  String _getOTP() {
+    return _controllers.map((controller) => controller.text).join();
+  }
+
+  void _verifyOTP() async {
+    String otp = _getOTP().trim();
+    if (otp.isEmpty || otp.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Enter a valid OTP")),
+      );
+      return;
+    }
+
+    bool isSuccess = await AuthService().verifyOTP(otp);
+    if (isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("OTP Verified Successfully!")),
+      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Invalid OTP. Try again.")),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer();
+  }
+
 
   @override
   void dispose() {
+    _resendTimer.cancel();
     for (var controller in _controllers) {
       controller.dispose();
     }
@@ -76,13 +130,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                      );
-                    },
+                    onPressed: _verifyOTP,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14.0),
                       backgroundColor: Color(0xff004DB9),
@@ -102,9 +150,14 @@ class _OTPVerificationState extends State<OTPVerification> {
                 ),
                 const SizedBox(height: 20.0),
                 TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Resend OTP',
+                  onPressed: _isResendAvailable
+                      ? () {
+                    _startResendTimer();
+                    // Trigger resend OTP logic here
+                  }
+                      : null,
+                  child: Text(
+                    _isResendAvailable ? 'Resend OTP' : 'Wait 30s to Resend',
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
