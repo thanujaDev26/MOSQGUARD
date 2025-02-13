@@ -6,6 +6,7 @@ class MainProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     //we need to get this data from database
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: ProfilePage(
         firstName: 'John',
         lastName: 'Doe',

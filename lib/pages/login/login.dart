@@ -31,9 +31,7 @@ class _LoginState extends State<Login> {
     });
     try{
       await AuthService().signinWithGoogle();
-      if(context.mounted){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
-      }
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
     }
     catch(error){
       showDialog(context: context,
@@ -159,12 +157,10 @@ class _LoginState extends State<Login> {
                         onPressed: ()=> _signAnonymously(context),
                       ),
                       const SizedBox(height: 20.0),
-                      _isLoading
-                          ? const CircularProgressIndicator()
-                          : SocialButton(
+                      SocialButton(
                         icon: "assets/icons/google.png",
                         label: 'Continue with Google',
-                        onPressed: ()=>_signInWithGoogle,
+                        onPressed: ()=>_signInWithGoogle(),
                       ),
                       const SizedBox(height: 20.0),
                     ],
