@@ -23,8 +23,7 @@ class Sidebar extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     final String userName = AuthService().getCurrentUser()?.displayName ?? "Guest";
-    final String userImage = AuthService().getCurrentUser()?.photoURL ?? "assets/icons/default_image_url.png";
-
+    final String? userImageUrl = AuthService().getCurrentUser()?.photoURL;
 
     return Drawer(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
@@ -43,10 +42,10 @@ class Sidebar extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.blue,
-                    backgroundImage: userImage.isNotEmpty
-                        ? NetworkImage(userImage)
-                        : null,
-                    child: userImage.isEmpty
+                    backgroundImage: userImageUrl != null && userImageUrl.isNotEmpty
+                        ? NetworkImage(userImageUrl)
+                        : AssetImage('assets/icons/default_image_url.png') as ImageProvider,
+                    child: userImageUrl == null || userImageUrl.isEmpty
                         ? const Icon(
                       Icons.person,
                       color: Colors.white,

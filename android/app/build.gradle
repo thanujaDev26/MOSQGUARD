@@ -9,15 +9,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mosqguard"
+    namespace = "com.android.mosqguard"
 
     // Update compileSdkVersion to 34
     compileSdkVersion 34
 
     defaultConfig {
-        applicationId = "com.example.mosqguard"
+        applicationId = "com.android.mosqguard"
         minSdkVersion 23
-        targetSdkVersion 34  // Update targetSdkVersion to 34
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true
