@@ -33,7 +33,9 @@ class _LoginState extends State<Login> {
     });
     try{
       await AuthService().signinWithGoogle();
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+      if(context.mounted){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+      }
     }
     catch(error){
       showDialog(context: context,

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "384105001573",
-    "project_id": "mosqguard-cc344",
-    "storage_bucket": "mosqguard-cc344.firebasestorage.app"
+    "project_number": "510801180620",
+    "project_id": "dengue-shield-webapp-log-c8797",
+    "storage_bucket": "dengue-shield-webapp-log-c8797.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:384105001573:android:ec9f140322a5f64abf8c8c",
+        "mobilesdk_app_id": "1:510801180620:android:3967d72b9e6300d56b0f69",
         "android_client_info": {
-          "package_name": "com.example.mosqguard"
+          "package_name": "com.android.mosqguard"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB77KgU9yOz3yLlqI7lieJaqycB4RzvLWM"
+          "current_key": "AIzaSyDx1QO028GRrFEc6QoV2J1uKgky_mcHpv4"
         }
       ],
       "services": {
