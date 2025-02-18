@@ -118,9 +118,14 @@ class _CaptureState extends State<Capture> {
                             SizedBox(width: 8), // Add spacing between text and icon
                             Transform.rotate(
                               angle: -0.785398, // Rotate the icon
-                              child: Icon(
-                                Icons.send,
-                                color: Colors.white,
+                              child: GestureDetector(
+                                onTap: () =>{
+                                  print("Submitted"),
+                                },
+                                child: Icon(
+                                  Icons.send,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ],
