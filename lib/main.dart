@@ -5,7 +5,6 @@ import 'package:mosqguard/pages/ContactUs/ContactUs.dart';
 import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
-
 import 'pages/News/News.dart';
 
 void main() async{

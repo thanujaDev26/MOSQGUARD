@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/capture/new_capture.dart';
 import '../Status/Status.dart';
 import '../capture/capture1.dart';
 import '../notification/Notification.dart';
@@ -42,7 +43,7 @@ class CustomBottomBar extends StatelessWidget {
               icon: GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Capture()));
+                      MaterialPageRoute(builder: (context) => ReportingScreen()));
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 10),

@@ -14,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
       titleTextStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-      automaticallyImplyLeading: false, // Remove default back button
+      automaticallyImplyLeading: false,
       elevation: 0,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
