@@ -4,8 +4,14 @@ class CalendarInputField extends StatefulWidget {
   final Color inputFieldColor;
   final Color textColor;
   final Color borderColor;
+  final Function(String) onDateSelected; // Callback function
 
-  CalendarInputField({required this.inputFieldColor, required this.textColor, required this.borderColor});
+  CalendarInputField({
+    required this.inputFieldColor,
+    required this.textColor,
+    required this.borderColor,
+    required this.onDateSelected, // Accept the callback
+  });
 
   @override
   _CalendarInputFieldState createState() => _CalendarInputFieldState();
@@ -25,10 +31,13 @@ class _CalendarInputFieldState extends State<CalendarInputField> {
       firstDate: firstDate,
       lastDate: lastDate,
     );
-    if (pickedDate != null && pickedDate != initialDate) {
+
+    if (pickedDate != null) {
+      String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
       setState(() {
-        _dateController.text = "${pickedDate.toLocal()}".split(' ')[0];
+        _dateController.text = formattedDate;
       });
+      widget.onDateSelected(formattedDate);
     }
   }
 
@@ -37,6 +46,7 @@ class _CalendarInputFieldState extends State<CalendarInputField> {
     return TextField(
       controller: _dateController,
       onTap: () => _selectDate(context),
+      readOnly: true,
       decoration: InputDecoration(
         labelText: "DATE",
         labelStyle: TextStyle(color: widget.textColor),
@@ -50,3 +60,4 @@ class _CalendarInputFieldState extends State<CalendarInputField> {
     );
   }
 }
+
