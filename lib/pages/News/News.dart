@@ -16,7 +16,7 @@ class News extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      //body: NewsBody(),
+      body: NewsBody(),
     );
   }
 }
