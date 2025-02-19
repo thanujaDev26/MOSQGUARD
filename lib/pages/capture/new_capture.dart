@@ -15,7 +15,23 @@ class _ReportingScreenState extends State<ReportingScreen> {
   List<File> _images = [];
   final ImagePicker _picker = ImagePicker();
 
-  // Function to show dialog for selecting image source
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController nicController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController aboutController = TextEditingController();
+  DateTime? selectedDate;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    nicController.dispose();
+    mobileController.dispose();
+    locationController.dispose();
+    aboutController.dispose();
+    super.dispose();
+  }
+
   Future<void> showImageSourceDialog() async {
     showModalBottomSheet(
       context: context,
@@ -45,7 +61,6 @@ class _ReportingScreenState extends State<ReportingScreen> {
     );
   }
 
-  // Function to pick an image from camera or gallery
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
 
@@ -58,6 +73,18 @@ class _ReportingScreenState extends State<ReportingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void onCancle (){
+      setState(() {
+        selectedDate = null;
+        nameController.clear();
+        nicController.clear();
+        mobileController.clear();
+        locationController.clear();
+        aboutController.clear();
+        _images.clear();
+      });
+    }
+
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
@@ -118,7 +145,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                   ),
                   SizedBox(height: 60),
 
-                  // Display images in a horizontal scrollable list
+
                   SizedBox(
                     height: 100,
                     child: ListView(
@@ -131,7 +158,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: showImageSourceDialog, // Open the dialog to choose image source
+                          onTap: showImageSourceDialog,
                           child: Container(
                             width: 80,
                             height: 80,
@@ -153,18 +180,28 @@ class _ReportingScreenState extends State<ReportingScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        CalendarInputField(inputFieldColor: inputFieldColor, textColor: textColor, borderColor: borderColor),
+                        CalendarInputField(
+                          inputFieldColor: inputFieldColor,
+                          textColor: textColor,
+                          borderColor: borderColor,
+                          onDateSelected: (date){
+                            setState(() {
+                              selectedDate = DateTime.tryParse(date) ?? selectedDate;
+                            });
+                          },
+                        ),
                         SizedBox(height: 10),
-                        _buildTextField("NAME", inputFieldColor, textColor, borderColor),
+                        _buildTextField("NAME", nameController, inputFieldColor, textColor, borderColor),
                         SizedBox(height: 10),
-                        _buildTextField("NIC", inputFieldColor, textColor, borderColor),
+                        _buildTextField("NIC", nicController, inputFieldColor, textColor, borderColor),
                         SizedBox(height: 10),
-                        _buildTextField("MOBILE NO.", inputFieldColor, textColor, borderColor),
+                        _buildTextField("MOBILE NO.", mobileController, inputFieldColor, textColor, borderColor),
                         SizedBox(height: 10),
-                        _buildTextField("LOCATION", inputFieldColor, textColor, borderColor),
+                        _buildTextField("LOCATION", locationController, inputFieldColor, textColor, borderColor),
                         SizedBox(height: 10),
                         _buildTextField(
                           "ABOUT COMPLAIN",
+                          aboutController,
                           inputFieldColor,
                           textColor,
                           borderColor,
@@ -184,9 +221,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                           padding: EdgeInsets.all(20),
                           backgroundColor: Color(0xffB01D00),
                         ),
-                        onPressed: () {
-                          // Handle cancel action
-                        },
+                        onPressed: onCancle,
                         child: Icon(Icons.close, color: Colors.white),
                       ),
                       ElevatedButton(
@@ -196,7 +231,12 @@ class _ReportingScreenState extends State<ReportingScreen> {
                           backgroundColor: Color(0xff004DB9),
                         ),
                         onPressed: () {
-                          // Handle submit action
+                          print("Name: ${nameController.text}");
+                          print("NIC: ${nicController.text}");
+                          print("Mobile: ${mobileController.text}");
+                          print("Location: ${locationController.text}");
+                          print("About: ${aboutController.text}");
+                          print("Selected Date: ${selectedDate != null ? selectedDate.toString() : 'No date selected'}");
                         },
                         child: Transform.rotate(
                           angle: 45 * (-3.141592653589793 / 180),
@@ -216,12 +256,14 @@ class _ReportingScreenState extends State<ReportingScreen> {
 
   Widget _buildTextField(
       String hintText,
+      TextEditingController controller,
       Color fillColor,
       Color textColor,
       Color borderColor, {
         int maxLines = 1,
       }) {
     return TextField(
+      controller: controller,
       style: TextStyle(color: textColor),
       maxLines: maxLines,
       decoration: InputDecoration(
@@ -237,3 +279,4 @@ class _ReportingScreenState extends State<ReportingScreen> {
     );
   }
 }
+
