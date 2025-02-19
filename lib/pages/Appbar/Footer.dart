@@ -6,7 +6,7 @@ import '../notification/Notification.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 
-import '../profile/mainProfilePage.dart';
+import '../profile/profilepage.dart';
 
 class CustomBottomBar extends StatelessWidget {
   const CustomBottomBar({super.key});
@@ -74,7 +74,7 @@ class CustomBottomBar extends StatelessWidget {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainProfilePage()),
+                  MaterialPageRoute(builder: (context) => Profile()),
                 );
               },
               child: Container(
