@@ -6,6 +6,7 @@ import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
