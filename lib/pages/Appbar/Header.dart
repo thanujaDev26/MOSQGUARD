@@ -69,7 +69,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: Icon(Icons.article, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
-                  // Action for news button
+                  Navigator.of(context).pushNamed('/news');
                   debugPrint('News button clicked');
                 },
               ),
