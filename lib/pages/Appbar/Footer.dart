@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Status/Status.dart';
-import '../capture/capture.dart';
+import '../capture/capture1.dart';
 import '../notification/Notification.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
