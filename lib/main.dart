@@ -7,13 +7,11 @@ import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/pages/News/News.dart';
 
-import 'firebase_test.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseTest.testConnection();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeNotifier(),
