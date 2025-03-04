@@ -11,7 +11,6 @@ class StatusBody extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Mosquard',
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -56,28 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           _buildReportsList(),
         ],
-      ),
-      floatingActionButton: _buildFloatingActionButton(),
-    );
-  }
-
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () => print("Clicked Plus Mark!"),
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.secondary.withOpacity(0.8),
-            ],
-          ),
-        ),
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onSecondary),
       ),
     );
   }
