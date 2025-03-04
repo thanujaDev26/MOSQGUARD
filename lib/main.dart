@@ -7,6 +7,8 @@ import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/pages/News/News.dart';
 
+import 'pages/dashboard/Monthly_Report.dart';
+
 
 
 void main() async{
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/aboutus': (context)=>Aboutus(),
         '/contactus': (context)=>Contactus(),
         '/news': (context)=>News(),
+        '/monthly_report': (context)=>MonthlyReportPage(),
       },
     );
   }

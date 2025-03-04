@@ -7,61 +7,67 @@ class NewsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildCommunityDrivesButton(),
-              _buildFeaturedEvent(),
-              _buildEventList(),
-            ],
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      backgroundColor: colorScheme.background,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildCommunityDrivesButton(context),
+            _buildFeaturedEvent(context, isDarkMode),
+            _buildEventList(context, isDarkMode),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCommunityDrivesButton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: colorScheme.secondary,
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Center(
+          child: Text(
+            'Community Drives',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: colorScheme.onSecondary,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCommunityDrivesButton() {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.yellow[700],
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 5,
-          ),
-        ],
-      ),
-      // child: const Padding(
-      //   padding: EdgeInsets.symmetric(vertical: 12),
-      //   child: Center(
-      //     child: Text(
-      //       'Community Drives',
-      //       style: TextStyle(
-      //         fontWeight: FontWeight.bold,
-      //         fontSize: 16,
-      //       ),
-      //     ),
-      //   ),
-      // ),
-    );
-  }
+  Widget _buildFeaturedEvent(BuildContext context, bool isDarkMode) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-  Widget _buildFeaturedEvent() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: colorScheme.shadow.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
           ),
@@ -88,7 +94,7 @@ class NewsBody extends StatelessWidget {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      Colors.black.withOpacity(0.7),
+                      colorScheme.surface.withOpacity(0.7),
                       Colors.transparent,
                     ],
                   ),
@@ -96,10 +102,10 @@ class NewsBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Blood Donation - 12 February 2025',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
@@ -107,7 +113,7 @@ class NewsBody extends StatelessWidget {
                     Text(
                       'Mr. Saman Perera - January 1, 2025',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: colorScheme.onSurface.withOpacity(0.9),
                         fontSize: 14,
                       ),
                     ),
@@ -121,24 +127,29 @@ class NewsBody extends StatelessWidget {
     );
   }
 
-  Widget _buildEventList() {
+  Widget _buildEventList(BuildContext context, bool isDarkMode) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        children: List.generate(3, (index) => _buildEventCard()),
+        children: List.generate(
+          3,
+              (index) => _buildEventCard(context, isDarkMode),
+        ),
       ),
     );
   }
 
-  Widget _buildEventCard() {
+  Widget _buildEventCard(BuildContext context, bool isDarkMode) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: colorScheme.shadow.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 5,
           ),
@@ -152,18 +163,19 @@ class NewsBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Shramadhana Campaign - Jan 24',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Mr. Saman Perera - January 1, 2025',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: colorScheme.onSurface.withOpacity(0.6),
                       fontSize: 14,
                     ),
                   ),
@@ -173,7 +185,7 @@ class NewsBody extends StatelessWidget {
                     child: Text(
                       'Read More',
                       style: TextStyle(
-                        color: Colors.red[700],
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

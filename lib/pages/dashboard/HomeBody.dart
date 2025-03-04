@@ -107,7 +107,9 @@ class CustomHome extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/monthly_report');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -132,19 +134,6 @@ class CustomHome extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.grey[200],
                   ),
-                  // child: GoogleMap(
-                  //   initialCameraPosition: CameraPosition(
-                  //     target: LatLng(37.7749, -122.4194), // San Francisco coordinates
-                  //     zoom: 12,
-                  //   ),
-                  //   markers: {
-                  //     Marker(
-                  //       markerId: MarkerId("default"),
-                  //       position: LatLng(37.7749, -122.4194),
-                  //       infoWindow: InfoWindow(title: "Reported Area"),
-                  //     ),
-                  //   },
-                  // ),
                 ),
                 SizedBox(height: 8),
                 Row(
