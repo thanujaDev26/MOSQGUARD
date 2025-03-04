@@ -8,46 +8,25 @@ class StatusBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF24B686),
-          primary: const Color(0xFF24B686),
-          secondary: const Color(0xFF1E3D6B),
-          tertiary: const Color(0xFFFFA726),
-        ),
-        fontFamily: 'Poppins',
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        body: const StatusScreen(),
       ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF24B686),
-          brightness: Brightness.dark,
-          primary: const Color(0xFF24B686),
-          secondary: const Color(0xFF1E3D6B),
-          tertiary: const Color(0xFFFFA726),
-        ),
-        fontFamily: 'Poppins',
-      ),
-      themeMode: themeNotifier.themeMode,
-      home: const HomeScreen(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class StatusScreen extends StatefulWidget {
+  const StatusScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<StatusScreen> createState() => _StatusScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

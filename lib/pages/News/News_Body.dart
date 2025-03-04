@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mosqguard/utils/theme_notifier.dart';
 
 class NewsBody extends StatelessWidget {
   const NewsBody({super.key});
