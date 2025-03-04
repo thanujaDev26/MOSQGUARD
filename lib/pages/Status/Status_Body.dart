@@ -8,7 +8,6 @@ class StatusBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -24,6 +23,19 @@ class StatusBody extends StatelessWidget {
         ),
         fontFamily: 'Poppins',
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF24B686),
+          brightness: Brightness.dark,
+          primary: const Color(0xFF24B686),
+          secondary: const Color(0xFF1E3D6B),
+          tertiary: const Color(0xFFFFA726),
+        ),
+        fontFamily: 'Poppins',
+      ),
+      themeMode: themeNotifier.themeMode,
       home: const HomeScreen(),
     );
   }
@@ -40,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           _buildReportsList(),
@@ -52,26 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () {
-        print("Clicked Plus Mark!");
-      },
+      onPressed: () => print("Clicked Plus Mark!"),
       backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Container(
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          // shape: BoxShape.circle,
           borderRadius: BorderRadius.circular(100),
           gradient: LinearGradient(
             colors: [
               Theme.of(context).colorScheme.secondary,
               Theme.of(context).colorScheme.secondary.withOpacity(0.8),
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
           ),
         ),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onSecondary),
       ),
     );
   }
@@ -81,26 +87,17 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(16),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            String status = index % 3 == 0
-                ? 'In Progress'
-                : index % 3 == 1
-                    ? 'Completed'
-                    : 'Rejected';
-
+              (context, index) {
+            final status = ['In Progress', 'Completed', 'Rejected'][index % 3];
             return ReportCard(
               location: 'Kedawas Area ${index + 1}',
               time: '06/01/2023 04:05PM',
               status: status,
               imageUrl: 'https://picsum.photos/200/200?random=$index',
-              onTap: () {
-                // Navigate to a detailed screen (example)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ReportDetailsScreen()),
-                );
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ReportDetailsScreen()),
+              ),
             );
           },
           childCount: 10,
@@ -128,17 +125,19 @@ class ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine the border color based on the status
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     Color borderColor;
     switch (status.toLowerCase()) {
       case 'completed':
-        borderColor = Colors.yellow;
+        borderColor = colorScheme.secondary;
         break;
       case 'rejected':
-        borderColor = Colors.red;
+        borderColor = colorScheme.error;
         break;
       default:
-        borderColor = Colors.green;
+        borderColor = colorScheme.primary;
         break;
     }
 
@@ -151,13 +150,14 @@ class ReportCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: Ink(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                  color: borderColor, width: 2),
+              border: Border.all(color: borderColor, width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: isDark
+                      ? Colors.white.withOpacity(0.05)
+                      : Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -176,7 +176,7 @@ class ReportCard extends StatelessWidget {
                           Icons.location_on,
                           'Location',
                           location,
-                          Colors.blue,
+                          colorScheme.primary,
                         ),
                         const SizedBox(height: 8),
                         _buildInfoRow(
@@ -184,7 +184,7 @@ class ReportCard extends StatelessWidget {
                           Icons.access_time,
                           'Time',
                           time,
-                          Colors.grey,
+                          colorScheme.onSurface.withOpacity(0.6),
                         ),
                         const SizedBox(height: 8),
                         _buildStatusBadge(context),
@@ -194,12 +194,7 @@ class ReportCard extends StatelessWidget {
                   const SizedBox(width: 16),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      imageUrl,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
+                    child: Image.network(imageUrl, width: 100, height: 100, fit: BoxFit.cover),
                   ),
                 ],
               ),
@@ -211,29 +206,26 @@ class ReportCard extends StatelessWidget {
   }
 
   Widget _buildInfoRow(
-    BuildContext context,
-    IconData icon,
-    String label,
-    String value,
-    Color iconColor,
-  ) {
+      BuildContext context,
+      IconData icon,
+      String label,
+      String value,
+      Color iconColor,
+      ) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Row(
       children: [
         Icon(icon, size: 18, color: iconColor),
         const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-          ),
-        ),
+        Text('$label: ', style: textTheme.bodySmall?.copyWith(
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+        )),
         Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
+          child: Text(value,
+            style: textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
-              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             overflow: TextOverflow.ellipsis,
           ),
@@ -243,50 +235,46 @@ class ReportCard extends StatelessWidget {
   }
 
   Widget _buildStatusBadge(BuildContext context) {
-    Color getStatusColor() {
-      switch (status.toLowerCase()) {
-        case 'completed':
-          return Colors.green;
-        case 'rejected':
-          return Colors.red;
-        default:
-          return Colors.blue;
-      }
+    final colorScheme = Theme.of(context).colorScheme;
+    Color statusColor;
+    IconData statusIcon;
+
+    switch (status.toLowerCase()) {
+      case 'completed':
+        statusColor = colorScheme.secondary;
+        statusIcon = Icons.check_circle;
+        break;
+      case 'rejected':
+        statusColor = colorScheme.error;
+        statusIcon = Icons.cancel;
+        break;
+      default:
+        statusColor = colorScheme.primary;
+        statusIcon = Icons.refresh;
+        break;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: getStatusColor().withOpacity(0.1),
+        color: statusColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            status.toLowerCase() == 'completed'
-                ? Icons.check_circle
-                : status.toLowerCase() == 'rejected'
-                    ? Icons.cancel
-                    : Icons.refresh,
-            size: 16,
-            color: getStatusColor(),
-          ),
+          Icon(statusIcon, size: 16, color: statusColor),
           const SizedBox(width: 6),
-          Text(
-            status,
-            style: TextStyle(
-              color: getStatusColor(),
-              fontWeight: FontWeight.w500,
-              fontSize: 13,
-            ),
-          ),
+          Text(status,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: statusColor,
+                fontWeight: FontWeight.w500,
+              )),
         ],
       ),
     );
   }
 }
-
 
 class ReportDetailsScreen extends StatelessWidget {
   const ReportDetailsScreen({super.key});
@@ -294,23 +282,9 @@ class ReportDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate back to home screen and clear stack
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-              (route) => false, // Clear stack
-            );
-          },
-        ),
-        title: const Text('Report Details'),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-      ),
-      body: const Center(
-        child: Text('Report details go here.'),
+      body: Center(
+        child: Text('Report details go here.',
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
       ),
     );
   }
