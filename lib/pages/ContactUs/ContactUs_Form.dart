@@ -57,16 +57,7 @@ class _ContactUsFormState extends State<ContactUsForm> {
               hintText: "Enter your message",
               maxLines: 5,
             ),
-            const SizedBox(height: 16),
 
-            // Image Upload Button
-            ElevatedButton.icon(
-              onPressed: () {
-                // Implement image selection logic
-              },
-              icon: const Icon(Icons.image),
-              label: const Text("Attach Image"),
-            ),
             const SizedBox(height: 24),
 
             // Submit Button
