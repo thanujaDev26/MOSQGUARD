@@ -17,7 +17,7 @@ class _LoginState extends State<Login> {
 
   void _signAnonymously(BuildContext context) async{
     try{
-      await AuthService().signinInAnonymously();
+      await AuthService().signInAnonymously();
       if(context.mounted){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
       }
@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
       _isLoading = true;
     });
     try{
-      await AuthService().signinWithGoogle();
+      await AuthService().signInWithGoogle();
       if(context.mounted){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
       }

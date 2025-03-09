@@ -22,8 +22,9 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-    final String userName = AuthService().getCurrentUser()?.displayName ?? "Guest";
-    final String? userImageUrl = AuthService().getCurrentUser()?.photoURL;
+    final user = AuthService().getCurrentUser();
+    final String userName = user?.displayName ?? "Guest";
+    final String? userImageUrl = user?.photoURL;
 
     return Drawer(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
