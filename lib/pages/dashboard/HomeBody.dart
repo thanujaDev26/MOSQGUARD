@@ -127,9 +127,7 @@ class CustomHome extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                /// **✅ Replaced Empty Container with the Map Widget**
                 MapScreen(),
-
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

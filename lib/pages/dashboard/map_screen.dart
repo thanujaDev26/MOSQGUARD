@@ -11,6 +11,7 @@ class _MapScreenState extends State<MapScreen> {
   GoogleMapController? _controller;
   LatLng _currentPosition = LatLng(0.0, 0.0);
   bool _loading = true;
+  double _currentZoom = 10.0;
 
   @override
   void initState() {
@@ -36,33 +37,74 @@ class _MapScreenState extends State<MapScreen> {
       _loading = false;
     });
 
-    _controller?.animateCamera(CameraUpdate.newLatLng(_currentPosition));
+    _controller?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _currentPosition,
+          zoom: _currentZoom,
+        ),
+      ),
+    );
+  }
+
+  void _zoomOut() {
+    if (_controller != null) {
+      setState(() {
+        _currentZoom = (_currentZoom - 1.0).clamp(2.0, 21.0);
+      });
+      _controller!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _currentPosition,
+            zoom: _currentZoom,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200, // Adjust height to fit inside the home screen
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey[200],
-      ),
-      child: _loading
-          ? Center(child: CircularProgressIndicator())
-          : ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: _currentPosition,
-            zoom: 14.0,
+    return Stack(
+      children: [
+        Container(
+          height: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.grey[200],
           ),
-          myLocationEnabled: true,
-          myLocationButtonEnabled: false,
-          onMapCreated: (GoogleMapController controller) {
-            _controller = controller;
-          },
+          child: _loading
+              ? Center(child: CircularProgressIndicator())
+              : ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: _currentPosition,
+                zoom: _currentZoom,
+              ),
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+              },
+              onCameraMove: (position) {
+                _currentZoom = position.zoom;
+              },
+            ),
+          ),
         ),
-      ),
+
+
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: FloatingActionButton(
+            onPressed: _zoomOut,
+            backgroundColor: Colors.white,
+            child: Icon(Icons.zoom_out, color: Colors.black),
+          ),
+        ),
+      ],
     );
   }
 }
