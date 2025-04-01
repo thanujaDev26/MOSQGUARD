@@ -58,14 +58,12 @@ class CustomBottomBar extends StatelessWidget {
             ),
             BottomNavigationBarItem(icon: GestureDetector(
               onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationPage()),
-                );
+                  Navigator.of(context).pushNamed('/news');
+                  debugPrint('News button clicked');
               },
               child: Container(
                 margin: EdgeInsets.only(top: 10),
-                child: Icon(Icons.notifications),
+                child: Icon(Icons.article),
               ),
             ),
                 label: ""
