@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
+class NotificationPage extends StatefulWidget {
+  final Function(int) onNotificationUpdate;
+
+  const NotificationPage({super.key, required this.onNotificationUpdate});
+
+  @override
+  _NotificationPageState createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> {
+  int newNotificationsCount = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +26,7 @@ class NotificationPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // Add your notification cards here
           _buildNotificationCard(
             icon: Icons.warning_amber_rounded,
             title: "New Dengue Hotspot Alert",
@@ -30,6 +40,13 @@ class NotificationPage extends StatelessWidget {
             description: "Stay alert! Rainfall can increase mosquito breeding.",
             timestamp: "2 hours ago",
             iconColor: Colors.blue,
+          ),
+          _buildNotificationCard(
+            icon: Icons.check_circle,
+            title: "Issue Resolved",
+            description: "A previously reported hotspot has been addressed.",
+            timestamp: "1 day ago",
+            iconColor: Colors.green,
           ),
           _buildNotificationCard(
             icon: Icons.check_circle,
@@ -77,7 +94,10 @@ class NotificationPage extends StatelessWidget {
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.grey),
           onPressed: () {
-            // Add delete functionality if needed
+            setState(() {
+              if (newNotificationsCount > 0) newNotificationsCount--;
+              widget.onNotificationUpdate(newNotificationsCount); // Pass the new count to parent
+            });
           },
         ),
       ),
