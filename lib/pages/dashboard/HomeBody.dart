@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mosqguard/pages/dashboard/map_screen.dart';
 
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
@@ -123,18 +123,13 @@ class CustomHome extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16),
-          // Map Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[200],
-                  ),
-                ),
+                /// **✅ Replaced Empty Container with the Map Widget**
+                MapScreen(),
+
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -150,35 +145,6 @@ class CustomHome extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class LegendItem extends StatelessWidget {
-  final Color color;
-  final String label;
-
-  const LegendItem({
-    required this.color,
-    required this.label,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
     );
   }
 }
