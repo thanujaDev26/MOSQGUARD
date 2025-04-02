@@ -1,127 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/dashboard/map_screen.dart';
 
+
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return SingleChildScrollView(
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  color: Color(0xFF004DB9),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Total Reportings",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "12",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Image.asset(
-                          'assets/mosqguard/Reporting Person.png',
-                          height: 90,
-                        ),
-                      ],
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.04,
+              vertical: screenHeight * 0.02,
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWideScreen = constraints.maxWidth > 600;
+                return Column(
+                  children: [
+                    _buildStatsCard(
+                      context,
+                      title: "Total Reportings",
+                      value: "12",
+                      color: const Color(0xFF004DB9),
+                      imagePath: 'assets/mosqguard/Reporting Person.png',
+                      isWideScreen: isWideScreen,
                     ),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  color: Color(0xFFFFCC66),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "24",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Icon(Icons.access_time, color: Colors.red),
-                                ],
-                              ),
-                              Text(
-                                "Past 24 Hours",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "2",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                    SizedBox(height: screenHeight * 0.02),
+                    _buildStatsCard(
+                      context,
+                      title: "Past 24 Hours",
+                      value: "2",
+                      color: const Color(0xFFFFCC66),
+                      isWideScreen: isWideScreen,
+                      extraContent: Row(
+                        children: [
+                          Text(
+                            "24",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: screenWidth * 0.06,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                          Icon(Icons.access_time,
+                              color: Colors.red, size: screenWidth * 0.06),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/monthly_report');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              side: BorderSide(color: Colors.green),
-            ),
-            child: Text(
-              "Monthly Report",
-              style: TextStyle(color: Colors.green),
-            ),
-          ),
+
           SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -131,21 +68,102 @@ class CustomHome extends StatelessWidget {
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                   children: [
-                    _buildLegendItem("Reported Area", Colors.red),
-                    _buildLegendItem("On Progress", Colors.green),
-                    _buildLegendItem("Rejected", Colors.black),
-                    _buildLegendItem("Completed", Colors.yellow),
+                  if (extraContent != null) extraContent,
+                  Text(
+                  title,
+                  style: TextStyle(
+                  color: color.computeLuminance() > 0.5
+                  ? Colors.black
+                      : Colors.white,
+                  fontSize: screenWidth * 0.04,
+                  ),
+                  ),
+                  SizedBox(height: screenWidth * 0.02),
+                  Text(
+                  value,
+                  style: TextStyle(
+                  color: color.computeLuminance() > 0.5
+                  ? Colors.black
+                      : Colors.white,
+                  fontSize: screenWidth * 0.08,
+                  fontWeight: FontWeight.bold,
+                  ),
+                  ),
                   ],
+                  ),
+                ),
+                if (imagePath != null)
+                Image.asset(
+                imagePath,
+                height: isWideScreen ? screenWidth * 0.2 : screenWidth * 0.25,
                 ),
               ],
             ),
+          ),
+    );
+  }
+
+  Widget _buildMonthlyReportButton(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      width: screenWidth * 0.9,
+      child: ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, '/monthly_report'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(screenWidth * 0.03),
+          ),
+          side: const BorderSide(color: Colors.green),
+          padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
+        ),
+        child: Text(
+          "Monthly Report",
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: screenWidth * 0.04,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMapSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+      child: Column(
+        children: [
+          Container(
+            height: screenHeight * 0.3,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(screenWidth * 0.05),
+              color: Colors.grey[200],
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.02),
+          Wrap(
+            spacing: screenWidth * 0.04,
+            runSpacing: screenWidth * 0.02,
+            alignment: WrapAlignment.center,
+            children: const [
+              LegendItem(label: "Reported Area", color: Colors.red),
+              LegendItem(label: "On Progress", color: Colors.green),
+              LegendItem(label: "Rejected", color: Colors.black),
+              LegendItem(label: "Completed", color: Colors.yellow),
+            ],
           ),
         ],
       ),
     );
   }
 }
+
 
 Widget _buildLegendItem(String label, Color color) {
   return Row(
@@ -158,4 +176,5 @@ Widget _buildLegendItem(String label, Color color) {
       Text(label, style: TextStyle(fontSize: 12)),
     ],
   );
+
 }
