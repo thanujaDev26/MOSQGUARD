@@ -20,7 +20,7 @@ class ContactUsBody extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: const [
-              Icon(Icons.email, color: Colors.blue),
+              Icon(Icons.email, color: Color(0xFF004DB9)),
               SizedBox(width: 10),
               Text("support@example.com"),
             ],
@@ -28,7 +28,7 @@ class ContactUsBody extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: const [
-              Icon(Icons.phone, color: Colors.blue),
+              Icon(Icons.phone, color: Color(0xFF004DB9)),
               SizedBox(width: 10),
               Text("+123 456 7890"),
             ],
