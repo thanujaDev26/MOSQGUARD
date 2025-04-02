@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/AboutUs/AboutUs.dart';
 import 'package:mosqguard/pages/ContactUs/ContactUs.dart';
-import 'package:mosqguard/pages/Privacy_Policy/Privacy_Policy.dart';
 import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +40,6 @@ class MyApp extends StatelessWidget {
         '/contactus': (context)=>Contactus(),
         '/news': (context)=>News(),
         '/monthly_report': (context)=>MonthlyReportPage(),
-        '/privacyandpolicy': (context)=>PrivacyPolicyPage(),
       },
     );
   }
