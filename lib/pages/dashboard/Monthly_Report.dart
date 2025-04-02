@@ -88,6 +88,8 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
                   Expanded(child: _buildDateField(colorScheme)),
                   const SizedBox(width: 16),
                   Expanded(child: _buildDistrictDropdown(colorScheme)),
+                  const SizedBox(width: 16),
+                  _buildSearchButton(colorScheme),
                 ],
               );
             } else {
@@ -96,6 +98,11 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
                   _buildDateField(colorScheme),
                   const SizedBox(height: 16),
                   _buildDistrictDropdown(colorScheme),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _buildSearchButton(colorScheme),
+                  ),
                 ],
               );
             }
@@ -103,6 +110,25 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildSearchButton(ColorScheme colorScheme) {
+    return ElevatedButton.icon(
+      icon: Icon(Icons.search, color: colorScheme.onPrimary),
+      label: Text('Search', style: TextStyle(color: colorScheme.onPrimary)),
+      onPressed: _handleSearch,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xFF004DB9),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      ),
+    );
+  }
+
+  void _handleSearch() {
+    // Implement your search logic using:
+    // - _selectedDate
+    // - _selectedDistrict
+    print('Searching with date: $_selectedDate, district: $_selectedDistrict');
   }
 
   Widget _buildDateField(ColorScheme colorScheme) {
@@ -177,7 +203,7 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: colorScheme.primary.withOpacity(0.1),
+        color: Color(0xFF004DB9).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -186,13 +212,13 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
           Text('Category',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
+                color: Color(0xFF004DB9),
                 fontSize: 16,
               )),
           Text('Count',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
+                color: Color(0xFF004DB9),
                 fontSize: 16,
               )),
         ],
@@ -223,7 +249,7 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
         break;
       default:
         icon = Icons.info;
-        iconColor = colorScheme.primary;
+        iconColor = Color(0xFF004DB9);
     }
 
     return Padding(
@@ -245,7 +271,7 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
           Text(value,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
+                color: Color(0xFF004DB9),
                 fontSize: 14,
               )),
         ],
