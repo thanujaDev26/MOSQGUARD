@@ -29,6 +29,3 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-android {
-    compileSdk = 35
-}
