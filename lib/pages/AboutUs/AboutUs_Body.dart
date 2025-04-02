@@ -1,256 +1,181 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-    final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildAppHeader(context, isDarkMode),
-                  const SizedBox(height: 32),
-                  _buildMissionVisionSection(context, isDarkMode),
-                  const SizedBox(height: 24),
-                  _buildServicesSection(context, isDarkMode),
-                  const SizedBox(height: 32),
-                  _buildFooterSection(context, isDarkMode),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAppHeader(BuildContext context, bool isDarkMode) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Column(
-      children: [
-        Hero(
-          tag: 'app_logo',
-          child: Image.asset(
-            'assets/icons/App_Icon.png',
-            height: 120,
-          ),
-        ),
-        const SizedBox(height: 16),
-        RichText(
-          text: TextSpan(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextSpan(
-                text: 'MOS',
-                style: textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isDarkMode ? Colors.white : Colors.black,
+              // App Logo with Hero Animation
+              Hero(
+                tag: 'app_logo',
+                child: Image.asset(
+                  'assets/icons/App_Icon.png',
+                  height: 120,
                 ),
               ),
-              TextSpan(
-                text: 'Q',
-                style: textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
+              const SizedBox(height: 16),
+
+              // App Name
+              _buildAppTitle(context, isDarkMode),
+
+              const SizedBox(height: 8),
+
+              // App Tagline
+              Text(
+                'Smart Mosquito Monitoring & Control System',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  color: isDarkMode ? Colors.grey[200] : Colors.grey[600],
                 ),
               ),
-              TextSpan(
-                text: 'GUARD',
-                style: textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isDarkMode ? Colors.white : Colors.black,
-                ),
+              const SizedBox(height: 20),
+
+              // Mission Section
+              _buildCardSection(
+                context,
+                title: 'Our Mission',
+                icon: Icons.shield_outlined,
+                content:
+                'Our mission is to use advanced technology to prevent and control dengue fever, creating healthier communities through real-time surveillance, predictive analytics, and community engagement.',
               ),
+
+              // Vision Section
+              _buildCardSection(
+                context,
+                title: 'Our Vision',
+                icon: Icons.visibility_outlined,
+                content:
+                'Our vision is a dengue-free world. We strive to achieve this through continuous innovation, collaboration with health organizations and governments, and community engagement in combating dengue.',
+              ),
+
+              // Services Section
+              const SizedBox(height: 16),
+              _buildSectionTitle(context, 'Our Services'),
+              const SizedBox(height: 8),
+              _buildServiceTile(context, Icons.videocam, 'Real-time Surveillance'),
+              _buildServiceTile(context, Icons.insights, 'Predictive Analytics'),
+              _buildServiceTile(context, Icons.people, 'Community Engagement'),
+              _buildServiceTile(context, Icons.web, 'Web Application'),
             ],
           ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          'Smart Mosquito Monitoring & Control System',
-          textAlign: TextAlign.center,
-          style: textTheme.titleMedium?.copyWith(
-            color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMissionVisionSection(BuildContext context, bool isDarkMode) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth > 600;
-
-        return isWide
-            ? Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _buildInfoCard(context, isDarkMode,
-              icon: Icons.shield_outlined,
-              title: 'Our Mission',
-              content: 'Our mission is to use advanced technology to prevent and control dengue fever...',
-            )),
-            const SizedBox(width: 16),
-            Expanded(child: _buildInfoCard(context, isDarkMode,
-              icon: Icons.visibility_outlined,
-              title: 'Our Vision',
-              content: 'Our vision is a dengue-free world. We strive to achieve this through continuous innovation...',
-            )),
-          ],
-        )
-            : Column(
-          children: [
-            _buildInfoCard(context, isDarkMode,
-              icon: Icons.shield_outlined,
-              title: 'Our Mission',
-              content: 'Our mission is to use advanced technology to prevent and control dengue fever...',
-            ),
-            const SizedBox(height: 16),
-            _buildInfoCard(context, isDarkMode,
-              icon: Icons.visibility_outlined,
-              title: 'Our Vision',
-              content: 'Our vision is a dengue-free world. We strive to achieve this through continuous innovation...',
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildInfoCard(BuildContext context, bool isDarkMode, {
-    required IconData icon,
-    required String title,
-    required String content,
-  }) {
-    return Card(
-      elevation: 2,
-      color: isDarkMode ? Colors.grey[900] : Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isDarkMode ? Colors.blue[800] : Colors.blue[50],
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 32, color: isDarkMode ? Colors.blue[200] : Colors.blue[700]),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              content,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
-  Widget _buildServicesSection(BuildContext context, bool isDarkMode) {
-    return Column(
+  // App Title with Highlighted 'Q'
+  Widget _buildAppTitle(BuildContext context, bool isDarkMode) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Our Services',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          'MOS',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        const SizedBox(height: 24),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: MediaQuery.of(context).size.width > 600 ? 2 : 1,
-          childAspectRatio: 3,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+        Text(
+          'Q',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        Text(
+          'GUARD',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Section Title Widget
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        color: isDarkMode ? Colors.white : Colors.black,
+      ),
+    );
+  }
+
+  // Card Section Widget
+  Widget _buildCardSection(BuildContext context, {required String title, required IconData icon, required String content, Widget? child}) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: isDarkMode ? Colors.black : Colors.white,
+      shadowColor: Colors.black26,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            _ServiceItem(Icons.videocam, 'Real-time Surveillance', isDarkMode),
-            _ServiceItem(Icons.insights, 'Predictive Analytics', isDarkMode),
-            _ServiceItem(Icons.people, 'Community Engagement', isDarkMode),
-            _ServiceItem(Icons.web, 'Web Application', isDarkMode),
+            Row(
+              children: [
+                Icon(icon, color: Colors.blueAccent, size: 28),
+                const SizedBox(width: 10),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            if (content.isNotEmpty)
+              Text(
+                content,
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.grey[200] : Colors.grey[800]),
+              ),
+            if (child != null) child,
           ],
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildFooterSection(BuildContext context, bool isDarkMode) {
-    return Column(
-      children: [
-        Text(
-          '© 2024 MOSQGUARD. All rights reserved',
-          style: TextStyle(color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
-        ),
-      ],
-    );
-  }
-
-  Future<void> _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    }
-  }
-}
-
-class _ServiceItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final bool isDarkMode;
-
-  const _ServiceItem(this.icon, this.title, this.isDarkMode);
-
-  @override
-  Widget build(BuildContext context) {
+  // Service Tile Widget
+  Widget _buildServiceTile(BuildContext context, IconData icon, String title) {
+    final isDarkMode = Provider.of<ThemeNotifier>(context, listen: false).themeMode == ThemeMode.dark;
     return Card(
-      elevation: 1,
-      color: isDarkMode ? Colors.grey[900] : Colors.white,
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: isDarkMode ? Colors.black : Colors.white,
+      shadowColor: Colors.black26,
       child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Colors.blue[800] : Colors.blue[50],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: isDarkMode ? Colors.blue[200] : Colors.blue[700]),
+        leading: Icon(icon, color: Colors.blueAccent, size: 32),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
         ),
-        title: Text(title, style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: isDarkMode ? Colors.white : Colors.black,
-        )),
-        trailing: Icon(Icons.arrow_forward_ios_rounded,
-            size: 16, color: isDarkMode ? Colors.blue[200] : Colors.blue[700]),
-        onTap: () {},
       ),
     );
   }

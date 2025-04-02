@@ -88,9 +88,7 @@ class Sidebar extends StatelessWidget {
                       'Privacy and Policy',
                       style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/privacyandpolicy');
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     leading: const Icon(Icons.phone, color: Colors.green),
