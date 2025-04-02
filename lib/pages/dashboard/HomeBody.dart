@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/dashboard/map_screen.dart';
+
 
 class CustomHome extends StatelessWidget {
   const CustomHome({super.key});
@@ -56,36 +58,17 @@ class CustomHome extends StatelessWidget {
               },
             ),
           ),
-          _buildMonthlyReportButton(context),
-          SizedBox(height: screenHeight * 0.02),
-          _buildMapSection(context),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildStatsCard(BuildContext context, {
-    required String title,
-    required String value,
-    required Color color,
-    String? imagePath,
-    bool isWideScreen = false,
-    Widget? extraContent,
-  }) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(screenWidth * 0.04),
-        ),
-          color: color,
-          child: Padding(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: Row(
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                Expanded(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                MapScreen(),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                   children: [
                   if (extraContent != null) extraContent,
                   Text(
@@ -181,39 +164,17 @@ class CustomHome extends StatelessWidget {
   }
 }
 
-class LegendItem extends StatelessWidget {
-  final String label;
-  final Color color;
 
-  const LegendItem({
-    required this.label,
-    required this.color,
-    super.key,
-  });
+Widget _buildLegendItem(String label, Color color) {
+  return Row(
+    children: [
+      CircleAvatar(
+        radius: 6,
+        backgroundColor: color,
+      ),
+      SizedBox(width: 4),
+      Text(label, style: TextStyle(fontSize: 12)),
+    ],
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: screenWidth * 0.03,
-          height: screenWidth * 0.03,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        SizedBox(width: screenWidth * 0.01),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: screenWidth * 0.03,
-          ),
-        ),
-      ],
-    );
-  }
 }

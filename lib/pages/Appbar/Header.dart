@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/notification/Notification.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
+
+  @override
+  _CustomAppBarState createState() => _CustomAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(70); // Proper preferredSize getter
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  int newNotificationsCount = 3;  // Initial notification count
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +31,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 4),
-          // Main row for the title, menu, and actions
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Left section: Menu icon and title
               Row(
                 children: [
                   IconButton(
                     icon: Icon(Icons.menu, color: isDarkMode ? Colors.white : Colors.black),
                     onPressed: () {
-                      // Open the end drawer (ensuring the scaffold context is found properly)
                       Scaffold.maybeOf(context)?.openDrawer();
                     },
                   ),
@@ -65,13 +73,52 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ],
               ),
-              // Right section: News icon
-              IconButton(
-                icon: Icon(Icons.article, color: isDarkMode ? Colors.white : Colors.black),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/news');
-                  debugPrint('News button clicked');
-                },
+              Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.notifications, color: isDarkMode ? Colors.white : Colors.black),
+                    onPressed: () {
+                      // Push NotificationPage and update the count
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationPage(
+                            onNotificationUpdate: (newCount) {
+                              setState(() {
+                                newNotificationsCount = newCount;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  if (newNotificationsCount > 0)
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 20,
+                          minHeight: 20,
+                        ),
+                        child: Text(
+                          '$newNotificationsCount',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+
+                ],
               ),
             ],
           ),
@@ -79,7 +126,4 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(70);
 }
