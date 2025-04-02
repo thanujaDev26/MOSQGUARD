@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       
               Text(
                 "Edit Profile",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF004DB9)),
               ),
               SizedBox(height: 10),
       
@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.teal),
+                      border: Border.all(color: Color(0xFF004DB9)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         selectedLanguage = language;
                       });
                     },
-                    selectedColor: Colors.teal, // Highlight selected language
+                    selectedColor: Color(0xFF004DB9), // Highlight selected language
                     labelStyle: TextStyle(
                       color: selectedLanguage == language ? Colors.white : isDarkMode ? Colors.white : Colors.black,
                     ),
@@ -119,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Save action here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: Color(0xFF004DB9),
                     padding: EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Text("SAVE", style: TextStyle(fontSize: 16, color: Colors.white)),
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: Icon(icon, color: Colors.teal),
+        prefixIcon: Icon(icon, color: Color(0xFF004DB9)),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
