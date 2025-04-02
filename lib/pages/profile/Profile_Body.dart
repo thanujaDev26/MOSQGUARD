@@ -8,7 +8,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String selectedLanguage = "English"; // Default language
+  String selectedLanguage = "English";
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Wrap(
-                spacing: 15.0, // Space between items
+                spacing: 15.0,
                 children: ["English", "සිංහල", "தமிழ்"].map((language) {
                   return ChoiceChip(
                     label: Text(language),

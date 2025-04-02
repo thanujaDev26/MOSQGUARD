@@ -14,6 +14,7 @@ class ReportingScreen extends StatefulWidget {
 class _ReportingScreenState extends State<ReportingScreen> {
   List<File> _images = [];
   final ImagePicker _picker = ImagePicker();
+  String selectedLanguage = "English";
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController nicController = TextEditingController();
@@ -73,7 +74,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void onCancle (){
+    void onCancel() {
       setState(() {
         selectedDate = null;
         nameController.clear();
@@ -96,6 +97,15 @@ class _ReportingScreenState extends State<ReportingScreen> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Reporting Section',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.black,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
         backgroundColor: backgroundColor,
         body: GestureDetector(
           onTap: () {
@@ -106,46 +116,29 @@ class _ReportingScreenState extends State<ReportingScreen> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "REPORTING",
-                        style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'MOS',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Q',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'GUARD',
-                              style: TextStyle(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                  Wrap(
+                    spacing: 10.0,
+                    children: ["English", "සිංහල", "தமிழ்"].map((language) {
+                      return ChoiceChip(
+                        label: SizedBox(
+                          width: 50,
+                          child: Center(child: Text(language)),
                         ),
-                      ),
-                    ],
+                        selected: selectedLanguage == language,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedLanguage = language;
+                          });
+                        },
+                        selectedColor: Colors.black,
+                        labelStyle: TextStyle(
+                          color: selectedLanguage == language ? Colors.white : isDarkMode ? Colors.white : Colors.black,
+                        ),
+                        labelPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                      );
+                    }).toList(),
                   ),
-                  SizedBox(height: 60),
-
-
+                  SizedBox(height: 20,),
                   SizedBox(
                     height: 100,
                     child: ListView(
@@ -164,6 +157,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
+                              color: Colors.grey.withOpacity(0.3),
                             ),
                             child: CustomPaint(
                               painter: DottedBorderPainter(color: borderColor, strokeWidth: 1.0),
@@ -174,8 +168,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 40),
-
+                  SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -184,7 +177,7 @@ class _ReportingScreenState extends State<ReportingScreen> {
                           inputFieldColor: inputFieldColor,
                           textColor: textColor,
                           borderColor: borderColor,
-                          onDateSelected: (date){
+                          onDateSelected: (date) {
                             setState(() {
                               selectedDate = DateTime.tryParse(date) ?? selectedDate;
                             });
@@ -212,23 +205,49 @@ class _ReportingScreenState extends State<ReportingScreen> {
                     ),
                   ),
 
+                  // Buttons Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(20),
-                          backgroundColor: Color(0xffB01D00),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          backgroundColor: Colors.transparent, // No background, purely text
+                          side: BorderSide(color: Colors.blue.shade400, width: 1.5), // Blue border
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.blue.shade400, // Text color matches the border
+                          ),
                         ),
-                        onPressed: onCancle,
-                        child: Icon(Icons.close, color: Colors.white),
+                        onPressed: (){
+
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.close, color: Colors.blue.shade400),
+                            SizedBox(width: 8),
+                            Text('Clear'),
+                          ],
+                        ),
                       ),
+
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(20),
-                          backgroundColor: Color(0xff004DB9),
+                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8), // Rounded corners
+                          ),
+                          backgroundColor: Colors.blue.shade600,
+                          elevation: 2,
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.white
+                          ),
                         ),
                         onPressed: () {
                           print("Name: ${nameController.text}");
@@ -238,9 +257,15 @@ class _ReportingScreenState extends State<ReportingScreen> {
                           print("About: ${aboutController.text}");
                           print("Selected Date: ${selectedDate != null ? selectedDate.toString() : 'No date selected'}");
                         },
-                        child: Transform.rotate(
-                          angle: 45 * (-3.141592653589793 / 180),
-                          child: Icon(Icons.send, color: Colors.white),
+                        child: Row(
+                          children: [
+                            Text('Submit'),
+                            SizedBox(width: 8),
+                            Transform.rotate(
+                              angle: 45 * (-3.141592653589793 / 180),
+                              child: Icon(Icons.send, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -272,11 +297,11 @@ class _ReportingScreenState extends State<ReportingScreen> {
         hintText: hintText,
         hintStyle: TextStyle(color: textColor.withOpacity(0.6)),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: borderColor),
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: borderColor, width: 1.5),
         ),
+        contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       ),
     );
   }
 }
-
