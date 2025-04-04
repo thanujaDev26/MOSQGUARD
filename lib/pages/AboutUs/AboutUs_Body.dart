@@ -135,7 +135,7 @@ class AboutUsPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: Colors.blueAccent, size: 28),
+                Icon(icon, color: Color(0xFF004DB9), size: 28),
                 const SizedBox(width: 10),
                 Text(
                   title,
@@ -171,7 +171,7 @@ class AboutUsPage extends StatelessWidget {
       color: isDarkMode ? Colors.black : Colors.white,
       shadowColor: Colors.black26,
       child: ListTile(
-        leading: Icon(icon, color: Colors.blueAccent, size: 32),
+        leading: Icon(icon, color: Color(0xFF004DB9), size: 32),
         title: Text(
           title,
           style: TextStyle(fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
