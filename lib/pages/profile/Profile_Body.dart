@@ -65,39 +65,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  "Edit Profile",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
-                ),
-                SizedBox(height: 10),
-                buildTextField("First Name", firstName, Icons.person),
-                SizedBox(height: 10),
-                buildTextField("Last Name", lastName, Icons.person),
-                SizedBox(height: 10),
-                buildTextField("Phone Number", phoneNumber, Icons.phone),
-                SizedBox(height: 20),
-                Text(
-                  "Choose Language",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
-                ),
-                Center(
-                  child: Wrap(
-                    spacing: 15.0,
-                    children: ["English", "සිංහල", "தமிழ்"].map((language) {
-                      return ChoiceChip(
-                        label: Text(language),
-                        selected: selectedLanguage == language,
-                        onSelected: (selected) {
-                          setState(() {
-                            selectedLanguage = language;
-                          });
-                        },
-                        selectedColor: isDarkMode ? Colors.black : Colors.white,
-                        labelStyle: TextStyle(
-                          color: selectedLanguage == language
-                              ? (isDarkMode ? Colors.white : Colors.black)
-                              : (isDarkMode ? Colors.white70 : Colors.black54),
+
+              ),
+              SizedBox(height: 20),
+      
+              Text(
+                "Edit Profile",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF004DB9)),
+              ),
+              SizedBox(height: 10),
+      
+              // First Name
+              buildTextField("First Name", "John", Icons.person),
+              SizedBox(height: 10),
+      
+              // Last Name
+              buildTextField("Last Name", "Doe", Icons.person),
+              SizedBox(height: 10),
+      
+              // Phone Number with Country Code
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFF004DB9)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icons/sri-lanka.png',
+                          width: 40,
+                          height: 50,
                         ),
                       );
                     }).toList(),
@@ -111,12 +111,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       // Save action here
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isDarkMode ? Colors.white : Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      side: BorderSide(color: isDarkMode ? Colors.black : Colors.white, width: 1),
+
+                    selectedColor: Color(0xFF004DB9), // Highlight selected language
+                    labelStyle: TextStyle(
+                      color: selectedLanguage == language ? Colors.white : isDarkMode ? Colors.white : Colors.black,
                     ),
-                    child: Text("SAVE", style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.black : Colors.white)),
+                  );
+                }).toList(),
+              ),
+      
+              SizedBox(height: 20),
+      
+              // Save Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Save action here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF004DB9),
+                    padding: EdgeInsets.symmetric(vertical: 14),
+
                   ),
                 ),
               ],
@@ -136,13 +152,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: Icon(icon, color: isDarkMode ? Colors.white : Colors.black),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: isDarkMode ? Colors.white : Colors.black,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
+        prefixIcon: Icon(icon, color: Color(0xFF004DB9)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
