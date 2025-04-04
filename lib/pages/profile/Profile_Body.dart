@@ -42,15 +42,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () {
                           // Add functionality for tap on profile image if needed
                         },
-                        child: CircleAvatar(
-                          radius: 55,
-                          backgroundColor: isDarkMode ? Colors.white : Colors.black,
-                          backgroundImage: userImageUrl != null
-                              ? NetworkImage(userImageUrl)
-                              : null,
-                          child: userImageUrl == null
-                              ? Icon(Icons.person, size: 55, color: isDarkMode ? Colors.black : Colors.white)
-                              : null,
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 55,
+                              backgroundColor: isDarkMode ? Colors.white : Colors.black,
+                              backgroundImage: userImageUrl != null
+                                  ? NetworkImage(userImageUrl)
+                                  : null,
+                              child: userImageUrl == null
+                                  ? Icon(Icons.person, size: 55, color: isDarkMode ? Colors.black : Colors.white)
+                                  : null,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: PopupMenuButton<int>(
+                                onSelected: (value) {
+                                  if (value == 1) {
+                                    // Action to edit avatar - open image picker or other functionality
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: Text('Edit Avatar'),
+                                  ),
+                                ],
+                                child: Icon(
+                                  Icons.edit,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(height: 15),
