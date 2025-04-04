@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/login/login.dart';
+import 'package:mosqguard/pages/onBoardingScreens/onboarding.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -37,7 +38,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
     Timer(Duration(seconds: 8), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Login()),
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
       );
     });
   }
