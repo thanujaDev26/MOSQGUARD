@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosqguard/auth/auth.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:mosqguard/utils/language_notifier.dart'; // Import LanguageNotifier
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -115,9 +116,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         label: Text(language),
                         selected: selectedLanguage == language,
                         onSelected: (selected) {
-                          setState(() {
-                            selectedLanguage = language;
-                          });
+                          if (selected) {
+                            setState(() {
+                              selectedLanguage = language;
+                            });
+                            final languageNotifier = Provider.of<LanguageNotifier>(context, listen: false);
+                            if (language == 'English') {
+                              languageNotifier.setLocale(const Locale('en'));
+                            } else if (language == 'සිංහල') {
+                              languageNotifier.setLocale(const Locale('si'));
+                            } else if (language == 'தமிழ்') {
+                              languageNotifier.setLocale(const Locale('ta'));
+                            }
+                          }
                         },
                         selectedColor: isDarkMode ? Colors.black : Colors.white,
                         labelStyle: TextStyle(
