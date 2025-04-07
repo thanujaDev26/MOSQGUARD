@@ -76,7 +76,7 @@ class _ContactUsFormState extends State<ContactUsForm> {
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Color(0xFF004DB9),
                 ),
                 child: const Text(
                   "Submit",
