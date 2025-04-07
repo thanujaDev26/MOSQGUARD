@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
+import 'news_service.dart';
+import 'news_model.dart';
 
-class NewsBody extends StatelessWidget {
+class NewsBody extends StatefulWidget {
   const NewsBody({super.key});
+
+  @override
+  State<NewsBody> createState() => _NewsBodyState();
+}
+
+class _NewsBodyState extends State<NewsBody> {
+  late Future<List<News>> _newsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _newsFuture = NewsService().fetchNews();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +33,22 @@ class NewsBody extends StatelessWidget {
           children: [
             _buildCommunityDrivesButton(context),
             _buildFeaturedEvent(context, isDarkMode),
-            _buildEventList(context, isDarkMode),
+            FutureBuilder<List<News>>(
+              future: _newsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else {
+                  final newsList = snapshot.data!;
+                  return _buildEventList(context, isDarkMode, newsList);
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -127,19 +157,16 @@ class NewsBody extends StatelessWidget {
     );
   }
 
-  Widget _buildEventList(BuildContext context, bool isDarkMode) {
+  Widget _buildEventList(BuildContext context, bool isDarkMode, List<News> newsList) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        children: List.generate(
-          3,
-              (index) => _buildEventCard(context, isDarkMode),
-        ),
+        children: newsList.map((news) => _buildEventCard(context, isDarkMode, news)).toList(),
       ),
     );
   }
 
-  Widget _buildEventCard(BuildContext context, bool isDarkMode) {
+  Widget _buildEventCard(BuildContext context, bool isDarkMode, News news) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -164,7 +191,7 @@ class NewsBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Shramadhana Campaign - Jan 24',
+                    '${news.title} - ${_formatDate(news.date)}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -173,7 +200,7 @@ class NewsBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Mr. Saman Perera - January 1, 2025',
+                    news.venue,
                     style: TextStyle(
                       color: colorScheme.onSurface.withOpacity(0.6),
                       fontSize: 14,
@@ -194,20 +221,28 @@ class NewsBody extends StatelessWidget {
               ),
             ),
           ),
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
+          if (news.imageUrls.isNotEmpty)
+            Flexible(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                ),
+                child: Image.network(
+                  news.imageUrls.first,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-            child: Image.asset(
-              'assets/mosqguard/News2.png',
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
         ],
       ),
     );
+  }
+
+  String _formatDate(String rawDate) {
+    final date = DateTime.parse(rawDate);
+    return "${date.day}/${date.month}/${date.year}";
   }
 }
