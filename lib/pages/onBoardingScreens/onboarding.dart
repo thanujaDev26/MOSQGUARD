@@ -97,27 +97,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Positioned(
               bottom: 20,
               right: 20,
-              child: FloatingActionButton(
+              child: _currentPage == _titles.length - 1
+                  ? FloatingActionButton(
                 onPressed: () {
-                  if (_currentPage < _titles.length - 1) {
-                    setState(() {
-                      _currentPage++;
-                    });
-                  } else {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
-                    );
-                  }
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
                 },
                 backgroundColor: _arrowColor[_currentPage],
                 child: Icon(
-                  _currentPage < _titles.length - 1
-                      ? Icons.arrow_forward
-                      : Icons.check,
+                  Icons.check,
                   color: _descriptionColors[_currentPage],
                 ),
-              ),
+              )
+                  : SizedBox.shrink(),
             ),
           ],
         ),
