@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosqguard/auth/auth.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:mosqguard/utils/language_notifier.dart'; // Import LanguageNotifier
+import 'package:mosqguard/utils/language_notifier.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
