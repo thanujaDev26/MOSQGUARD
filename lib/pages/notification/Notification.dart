@@ -31,8 +31,6 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   void dispose() {
-    // When closing the screen, send back the updated count
-    Navigator.pop(context, notifications.length);
     super.dispose();
   }
 
@@ -54,31 +52,38 @@ class _NotificationPageState extends State<NotificationPage> {
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       )
-          : ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notif = notifications[index];
-          return Dismissible(
-            key: UniqueKey(),
-            direction: DismissDirection.endToStart,
-            background: Container(
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 20.0),
-              color: Colors.red.withOpacity(0.8),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            onDismissed: (_) => _removeNotification(index),
-            child: _buildNotificationCard(
-              icon: notif['icon'],
-              title: notif['title'],
-              description: notif['description'],
-              timestamp: notif['timestamp'],
-              iconColor: notif['iconColor'],
-              index: index,
-            ),
-          );
+          : Dismissible(
+        direction: DismissDirection.startToEnd, // Allow swipe from left to right to go back
+        key: Key("dismiss_notification_page"), // Unique key for dismissible
+        onDismissed: (_) {
+          Navigator.pop(context, notifications.length);
         },
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: notifications.length,
+          itemBuilder: (context, index) {
+            final notif = notifications[index];
+            return Dismissible(
+              key: UniqueKey(),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20.0),
+                color: Colors.red.withOpacity(0.8),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              onDismissed: (_) => _removeNotification(index),
+              child: _buildNotificationCard(
+                icon: notif['icon'],
+                title: notif['title'],
+                description: notif['description'],
+                timestamp: notif['timestamp'],
+                iconColor: notif['iconColor'],
+                index: index,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
