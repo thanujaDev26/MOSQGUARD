@@ -99,6 +99,17 @@ class ReportCard extends StatelessWidget {
     required this.onTap,
   });
 
+  bool isNewComplaint(String datetimeStr) {
+    try {
+      final complaintDate = DateTime.parse(datetimeStr);
+      final now = DateTime.now();
+      final difference = now.difference(complaintDate);
+      return difference.inHours < 24;
+    } catch (_) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -138,9 +149,15 @@ class ReportCard extends StatelessWidget {
                       children: [
                         _buildInfoRow(context, Icons.location_on, 'Location', location, colorScheme.primary),
                         const SizedBox(height: 8),
-                        _buildInfoRow(context, Icons.access_time, 'Time', time, colorScheme.onSurface.withOpacity(0.6)),
+                        _buildInfoRow(context, Icons.access_time, 'Date', time, colorScheme.onSurface.withOpacity(0.6)),
                         const SizedBox(height: 8),
-                        StatusBadge(status: status),
+                        Row(
+                          children: [
+                            StatusBadge(status: status),
+                            const SizedBox(width: 8),
+                            if (isNewComplaint(time)) const NewBadge(),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -246,6 +263,37 @@ class StatusBadge extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: badgeColor,
               fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NewBadge extends StatelessWidget {
+  const NewBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.orangeAccent.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.orange),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Icon(Icons.fiber_new, size: 16, color: Colors.orange),
+          SizedBox(width: 4),
+          Text(
+            'New',
+            style: TextStyle(
+              color: Colors.orange,
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
             ),
           ),
         ],
