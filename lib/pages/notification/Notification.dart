@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/notification/notification_service.dart';
 
 class NotificationPage extends StatefulWidget {
   final Function(int) onNotificationUpdate;
@@ -10,39 +11,41 @@ class NotificationPage extends StatefulWidget {
 }
 class _NotificationPageState extends State<NotificationPage> {
   List<Map<String, dynamic>> notifications = [
-    {
-      "icon": Icons.warning_amber_rounded,
-      "title": "New Dengue Hotspot Alert",
-      "description": "A new dengue hotspot has been detected near your area.",
-      "timestamp": "5 min ago",
-      "iconColor": Colors.red,
-    },
-    {
-      "icon": Icons.water_drop,
-      "title": "Heavy Rain Expected",
-      "description": "Stay alert! Rainfall can increase mosquito breeding.",
-      "timestamp": "2 hours ago",
-      "iconColor": Colors.blue,
-    },
-    {
-      "icon": Icons.check_circle,
-      "title": "Issue Resolved",
-      "description": "A previously reported hotspot has been addressed.",
-      "timestamp": "1 day ago",
-      "iconColor": Colors.green,
-    },
-    {
-      "icon": Icons.check_circle,
-      "title": "Issue Resolved",
-      "description": "A previously reported hotspot has been addressed.",
-      "timestamp": "1 day ago",
-      "iconColor": Colors.green,
-    },
+    // {
+    //   "icon": Icons.warning_amber_rounded,
+    //   "title": "New Dengue Hotspot Alert",
+    //   "description": "A new dengue hotspot has been detected near your area.",
+    //   "timestamp": "5 min ago",
+    //   "iconColor": Colors.red,
+    // },
+    // {
+    //   "icon": Icons.water_drop,
+    //   "title": "Heavy Rain Expected",
+    //   "description": "Stay alert! Rainfall can increase mosquito breeding.",
+    //   "timestamp": "2 hours ago",
+    //   "iconColor": Colors.blue,
+    // },
+    // {
+    //   "icon": Icons.check_circle,
+    //   "title": "Issue Resolved",
+    //   "description": "A previously reported hotspot has been addressed.",
+    //   "timestamp": "1 day ago",
+    //   "iconColor": Colors.green,
+    // },
+    // {
+    //   "icon": Icons.check_circle,
+    //   "title": "Issue Resolved",
+    //   "description": "A previously reported hotspot has been addressed.",
+    //   "timestamp": "1 day ago",
+    //   "iconColor": Colors.green,
+    // },
   ];
+
 
   @override
   void initState() {
     super.initState();
+    notifications = NotificationService().getNotifications();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onNotificationUpdate(notifications.length);
     });
