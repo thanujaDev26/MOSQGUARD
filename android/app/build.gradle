@@ -12,7 +12,7 @@ android {
     namespace = "com.android.mosqguard"
 
     // Update compileSdkVersion to 34
-    compileSdkVersion 34
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId = "com.android.mosqguard"

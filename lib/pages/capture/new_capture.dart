@@ -1,251 +1,303 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:provider/provider.dart';
-import 'package:mosqguard/utils/calendar_input_field.dart';
-import 'package:mosqguard/utils/dotted_border_painter.dart';
-import 'package:mosqguard/utils/theme_notifier.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class ReportingScreen extends StatefulWidget {
+  const ReportingScreen({super.key});
+
   @override
-  _ReportingScreenState createState() => _ReportingScreenState();
+  _ComplaintFormState createState() => _ComplaintFormState();
 }
 
-class _ReportingScreenState extends State<ReportingScreen> {
-  List<File> _images = [];
-  final ImagePicker _picker = ImagePicker();
+class _ComplaintFormState extends State<ReportingScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String selectedLanguage = "English";
+  List<File> _selectedImages = [];
+  DateTime? _selectedDate;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController nicController = TextEditingController();
-  final TextEditingController mobileController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
-  final TextEditingController aboutController = TextEditingController();
-  DateTime? selectedDate;
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _nicController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _complaintController = TextEditingController();
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    nicController.dispose();
-    mobileController.dispose();
-    locationController.dispose();
-    aboutController.dispose();
-    super.dispose();
-  }
-
-  Future<void> showImageSourceDialog() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(15),
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text("Take a photo"),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text("Choose from gallery"),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    final XFile? pickedFile = await _picker.pickImage(source: source);
-
-    if (pickedFile != null) {
+  Future<void> _pickImages() async {
+    final pickedFiles = await ImagePicker().pickMultiImage();
+    if (pickedFiles != null) {
       setState(() {
-        _images.add(File(pickedFile.path));
+        _selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
       });
     }
   }
+
+  Future<void> _captureImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImages.add(File(pickedFile.path));
+      });
+    }
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _clearForm() {
+    setState(() {
+      _selectedImages.clear();
+      _selectedDate = null;
+      _firstNameController.clear();
+      _lastNameController.clear();
+      _nicController.clear();
+      _mobileController.clear();
+      _locationController.clear();
+      _complaintController.clear();
+    });
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final url = Uri.parse("http://172.20.10.2:3000/api/complain");
+      List<String> base64Images = _selectedImages.map((image) {
+        List<int> imageBytes = image.readAsBytesSync();
+        return base64Encode(imageBytes);
+      }).toList();
+
+      final Map<String, dynamic> complaintData = {
+        "fName": _firstNameController.text,
+        "lName": _lastNameController.text,
+        "NIC": _nicController.text,
+        "mobileNumber": _mobileController.text,
+        "location": _locationController.text,
+        "type": selectedLanguage,
+        "complain": _complaintController.text,
+        "images": base64Images,
+      };
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(complaintData),
+        );
+
+        if (response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Complaint Submitted Successfully!")),
+          );
+          _clearForm();
+        } else {
+          print("Failed: ${response.body}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error: ${response.statusCode}")),
+          );
+        }
+      } catch (e) {
+        print("Error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Something went wrong: $e")),
+        );
+      }
+    }
+  }
+
+
+  Color getPrimaryButtonColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? Colors.white : const Color(0xff002353);
+
+  Color getPrimaryTextColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? const Color(0xff002353) : Colors.white;
 
   @override
   Widget build(BuildContext context) {
-    void onCancle (){
-      setState(() {
-        selectedDate = null;
-        nameController.clear();
-        nicController.clear();
-        mobileController.clear();
-        locationController.clear();
-        aboutController.clear();
-        _images.clear();
-      });
-    }
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fieldWidth = screenWidth > 600 ? (screenWidth / 2) - 30 : screenWidth - 32;
 
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-
-    final backgroundColor = isDarkMode ? Colors.black : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black;
-    final inputFieldColor = (isDarkMode ? Colors.grey[900] : Colors.white) ?? Colors.grey;
-    final borderColor = isDarkMode ? Colors.white54 : Colors.black54;
-    final cameraIconColor = isDarkMode ? Colors.white : Colors.black;
-
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: backgroundColor,
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "REPORTING",
-                        style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'MOS',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Q',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'GUARD',
-                              style: TextStyle(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 60),
-
-
-                  SizedBox(
-                    height: 100,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        ..._images.map(
-                              (image) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Image.file(image, width: 80, height: 80, fit: BoxFit.cover),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: showImageSourceDialog,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: CustomPaint(
-                              painter: DottedBorderPainter(color: borderColor, strokeWidth: 1.0),
-                              child: Icon(Icons.camera_alt, color: cameraIconColor),
-                            ),
-                          ),
-                        ),
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Complaint Form"),
+        centerTitle: true,
+      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Select Language",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 40),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CalendarInputField(
-                          inputFieldColor: inputFieldColor,
-                          textColor: textColor,
-                          borderColor: borderColor,
-                          onDateSelected: (date){
+                    const SizedBox(height: 8),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 10.0,
+                      children: ["English", "සිංහල", "தமிழ்"].map((language) {
+                        return ChoiceChip(
+                          label: Text(
+                            language,
+                            style: TextStyle(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          selected: selectedLanguage == language,
+                          onSelected: (selected) {
                             setState(() {
-                              selectedDate = DateTime.tryParse(date) ?? selectedDate;
+                              selectedLanguage = language;
                             });
                           },
+                          selectedColor: Theme.of(context).brightness == Brightness.dark
+                              ? Color(0xff002353)
+                              : Color(0xff004a99),
+                          backgroundColor: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[800]!
+                              : Colors.grey[300]!,
+                        );
+                      }).toList(),
+                    ),
+
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _pickImages,
+                          icon: const Icon(Icons.image),
+                          label: const Text("Upload Images"),
                         ),
-                        SizedBox(height: 10),
-                        _buildTextField("NAME", nameController, inputFieldColor, textColor, borderColor),
-                        SizedBox(height: 10),
-                        _buildTextField("NIC", nicController, inputFieldColor, textColor, borderColor),
-                        SizedBox(height: 10),
-                        _buildTextField("MOBILE NO.", mobileController, inputFieldColor, textColor, borderColor),
-                        SizedBox(height: 10),
-                        _buildTextField("LOCATION", locationController, inputFieldColor, textColor, borderColor),
-                        SizedBox(height: 10),
-                        _buildTextField(
-                          "ABOUT COMPLAIN",
-                          aboutController,
-                          inputFieldColor,
-                          textColor,
-                          borderColor,
-                          maxLines: 3,
+                        const SizedBox(width: 10),
+                        OutlinedButton.icon(
+                          onPressed: _captureImage,
+                          icon: const Icon(Icons.camera_alt),
+                          label: const Text("Take Photo"),
                         ),
-                        SizedBox(height: 20),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    if (_selectedImages.isNotEmpty)
+                      SizedBox(
+                        height: 120,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _selectedImages.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.file(
+                                      _selectedImages[index],
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.cancel, color: Colors.red),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedImages.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 15,
+                      runSpacing: 15,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: fieldWidth,
+                          child: _buildTextField(_firstNameController, "First Name"),
+                        ),
+                        SizedBox(
+                          width: fieldWidth,
+                          child: _buildTextField(_lastNameController, "Last Name"),
+                        ),
+                        SizedBox(
+                          width: fieldWidth,
+                          child: _buildTextField(_nicController, "NIC/Passport"),
+                        ),
+                        SizedBox(
+                          width: fieldWidth,
+                          child: _buildTextField(_mobileController, "Mobile No", keyboardType: TextInputType.phone),
+                        ),
+                        SizedBox(
+                          width: fieldWidth,
+                          child: _buildTextField(_locationController, "Location"),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(_complaintController, "About the Complaint", maxLines: 3),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(20),
-                          backgroundColor: Color(0xffB01D00),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlinedButton(
+                          onPressed: _clearForm,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                            side: BorderSide(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          child: const Text("Clear"),
                         ),
-                        onPressed: onCancle,
-                        child: Icon(Icons.close, color: Colors.white),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(20),
-                          backgroundColor: Color(0xff004DB9),
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                          onPressed: _submitForm,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: getPrimaryButtonColor(context),
+                            foregroundColor: getPrimaryTextColor(context),
+                          ),
+                          child: const Text("Submit"),
                         ),
-                        onPressed: () {
-                          print("Name: ${nameController.text}");
-                          print("NIC: ${nicController.text}");
-                          print("Mobile: ${mobileController.text}");
-                          print("Location: ${locationController.text}");
-                          print("About: ${aboutController.text}");
-                          print("Selected Date: ${selectedDate != null ? selectedDate.toString() : 'No date selected'}");
-                        },
-                        child: Transform.rotate(
-                          angle: 45 * (-3.141592653589793 / 180),
-                          child: Icon(Icons.send, color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -254,29 +306,17 @@ class _ReportingScreenState extends State<ReportingScreen> {
     );
   }
 
-  Widget _buildTextField(
-      String hintText,
-      TextEditingController controller,
-      Color fillColor,
-      Color textColor,
-      Color borderColor, {
-        int maxLines = 1,
-      }) {
-    return TextField(
+  Widget _buildTextField(TextEditingController controller, String label,
+      {int maxLines = 1, TextInputType? keyboardType}) {
+    return TextFormField(
       controller: controller,
-      style: TextStyle(color: textColor),
-      maxLines: maxLines,
       decoration: InputDecoration(
-        filled: true,
-        fillColor: fillColor,
-        hintText: hintText,
-        hintStyle: TextStyle(color: textColor.withOpacity(0.6)),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: borderColor),
-        ),
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      validator: (value) => value!.isEmpty ? "Enter $label" : null,
     );
   }
 }
-
