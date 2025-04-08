@@ -10,11 +10,23 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(70); // Proper preferredSize getter
+  Size get preferredSize => const Size.fromHeight(70);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  int newNotificationsCount = 3;  // Initial notification count
+  int newNotificationsCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // You can optionally initialize notification count from a service
+  }
+
+  void _updateNotificationCount(int count) {
+    setState(() {
+      newNotificationsCount = count;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +64,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         fontSize: 20,
                       ),
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'Q',
                           style: TextStyle(
                             color: Colors.red,
@@ -77,38 +89,37 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.notifications, color: isDarkMode ? Colors.white : Colors.black),
-                    onPressed: () {
-                      // Push NotificationPage and update the count
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push<int>(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NotificationPage(
-                            onNotificationUpdate: (newCount) {
-                              setState(() {
-                                newNotificationsCount = newCount;
-                              });
-                            },
+                            onNotificationUpdate: _updateNotificationCount,
                           ),
                         ),
                       );
+                      if (result != null) {
+                        _updateNotificationCount(result);
+                      }
                     },
                   ),
                   if (newNotificationsCount > 0)
                     Positioned(
-                      right: 0,
+                      right: 4,
+                      top: 8,
                       child: Container(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minWidth: 20,
                           minHeight: 20,
                         ),
                         child: Text(
                           '$newNotificationsCount',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -117,7 +128,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ),
                       ),
                     ),
-
                 ],
               ),
             ],
