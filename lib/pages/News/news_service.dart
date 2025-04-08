@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import 'news_model.dart';
 
 class NewsService {
-  final String baseUrl = 'http://172.20.10.2:3000/api';
+  final String baseUrl = 'http://192.168.8.129:3000/api';
 
   Future<List<News>> fetchNews() async {
-    final response = await http.get(Uri.parse('http://172.20.10.2:3000/api/news'));
+    final response = await http.get(Uri.parse('http://192.168.8.129:3000/api/news'));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

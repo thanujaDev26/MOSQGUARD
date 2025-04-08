@@ -4,10 +4,7 @@ import 'Home_Body_Model.dart';
 
 class ApiService {
   static Future<MessageCountModel> fetchMessageCounts() async {
-    final url = Uri.parse('http://192.168.8.129:3000/api/message-counts'); // Replace with your actual API endpoint
-
-    final response = await http.get(url);
-
+    final response = await http.get(Uri.parse('http://localhost:3000/api/message-counts')); // 192.168.8.129 Replace with your actual API endpoint
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);

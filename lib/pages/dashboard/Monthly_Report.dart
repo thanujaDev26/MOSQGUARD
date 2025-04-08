@@ -1,280 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'Monthly_Report_Api.dart';
 
 class MonthlyReportPage extends StatefulWidget {
-  const MonthlyReportPage({super.key});
+  const MonthlyReportPage({Key? key}) : super(key: key);
 
   @override
-  State<MonthlyReportPage> createState() => _MonthlyReportPageState();
+  _MonthlyReportPageState createState() => _MonthlyReportPageState();
 }
 
 class _MonthlyReportPageState extends State<MonthlyReportPage> {
-  final List<String> _districts = [
-    'Colombo',
-    'Gampaha',
-    'Kalutara',
-    'Kandy',
-    'Matale',
-    'Nuwara Eliya'
-  ];
-  String? _selectedDistrict;
-  DateTime? _selectedDate;
-  final TextEditingController _dateController = TextEditingController();
+  final ReportService _reportService = ReportService();
+  late Map<String, dynamic> _reportData;
+  bool _isLoading = true;
+  String _errorMessage = '';
 
-  final List<Map<String, dynamic>> _reportData = [
-    {'category': 'Total Cases', 'count': 2450},
-    {'category': 'Total Investigations', 'count': 1980},
-    {'category': 'Recoveries', 'count': 2150},
-    {'category': 'Deaths', 'count': 42},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchReportData();
+  }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != _selectedDate) {
+  Future<void> _fetchReportData() async {
+    try {
+      final data = await _reportService.getMonthlyReport();
       setState(() {
-        _selectedDate = picked;
-        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        _reportData = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
       });
     }
   }
 
+  Widget _buildStatCard(String title, int value, Color color) {
+    return Card(
+      elevation: 4,
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value.toString(),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Monthly Report',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.black,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Monthly Report'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildSearchSection(isDarkMode, colorScheme),
-            const SizedBox(height: 24),
-            _buildReportTable(colorScheme),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchSection(bool isDarkMode, ColorScheme colorScheme) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth > 600) {
-              return Row(
-                children: [
-                  Expanded(child: _buildDateField(colorScheme)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildDistrictDropdown(colorScheme)),
-                  const SizedBox(width: 16),
-                  _buildSearchButton(colorScheme),
-                ],
-              );
-            } else {
-              return Column(
-                children: [
-                  _buildDateField(colorScheme),
-                  const SizedBox(height: 16),
-                  _buildDistrictDropdown(colorScheme),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: _buildSearchButton(colorScheme),
-                  ),
-                ],
-              );
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchButton(ColorScheme colorScheme) {
-    return ElevatedButton.icon(
-      icon: Icon(Icons.search, color: colorScheme.onPrimary),
-      label: Text('Search', style: TextStyle(color: colorScheme.onPrimary)),
-      onPressed: _handleSearch,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF004DB9),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      ),
-    );
-  }
-
-  void _handleSearch() {
-    // Implement your search logic using:
-    // - _selectedDate
-    // - _selectedDistrict
-    print('Searching with date: $_selectedDate, district: $_selectedDistrict');
-  }
-
-  Widget _buildDateField(ColorScheme colorScheme) {
-    return TextFormField(
-      controller: _dateController,
-      decoration: InputDecoration(
-        labelText: 'Search by Date',
-        prefixIcon: const Icon(Icons.calendar_today),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            setState(() {
-              _selectedDate = null;
-              _dateController.clear();
-            });
-          },
-        ),
-      ),
-      readOnly: true,
-      onTap: () => _selectDate(context),
-    );
-  }
-
-  Widget _buildDistrictDropdown(ColorScheme colorScheme) {
-    return DropdownButtonFormField<String>(
-      value: _selectedDistrict,
-      decoration: InputDecoration(
-        labelText: 'Select District',
-        prefixIcon: const Icon(Icons.location_on),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      items: _districts
-          .map((district) => DropdownMenuItem(
-        value: district,
-        child: Text(district),
-      ))
-          .toList(),
-      onChanged: (value) => setState(() => _selectedDistrict = value),
-      dropdownColor: colorScheme.surface,
-    );
-  }
-
-  Widget _buildReportTable(ColorScheme colorScheme) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _buildTableHeader(colorScheme),
-            const SizedBox(height: 8),
-            ..._reportData.map((data) => _buildTableRow(
-              data['category'],
-              data['count'].toString(),
-              colorScheme,
-            )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTableHeader(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Color(0xFF004DB9).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Category',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 16,
-              )),
-          Text('Count',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 16,
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTableRow(String label, String value, ColorScheme colorScheme) {
-    IconData icon;
-    Color iconColor;
-
-    switch(label) {
-      case 'Total Cases':
-        icon = Icons.assignment;
-        iconColor = Colors.orange;
-        break;
-      case 'Total Investigations':
-        icon = Icons.search;
-        iconColor = Colors.blue;
-        break;
-      case 'Recoveries':
-        icon = Icons.health_and_safety;
-        iconColor = Colors.green;
-        break;
-      case 'Deaths':
-        icon = Icons.warning;
-        iconColor = Colors.red;
-        break;
-      default:
-        icon = Icons.info;
-        iconColor = Color(0xFF004DB9);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: iconColor, size: 20),
-              const SizedBox(width: 12),
-              Text(label,
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 14,
-                  )),
-            ],
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _errorMessage.isNotEmpty
+          ? Center(child: Text(_errorMessage))
+          : Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
           ),
-          Text(value,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 14,
-              )),
-        ],
+          children: [
+            _buildStatCard('Total Cases', 3, Colors.blue),
+            _buildStatCard('Investigations', 3, Colors.orange),
+            _buildStatCard('Deaths', 3, Colors.red),
+            _buildStatCard('Recoveries', 3, Colors.green),
+          ],
+        ),
       ),
     );
   }
