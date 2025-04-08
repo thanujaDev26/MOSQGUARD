@@ -5,8 +5,8 @@ import 'Home_Body_Model.dart';
 class ApiService {
   static Future<MessageCountModel> fetchMessageCounts() async {
     try {
-      print('Attempting to fetch from API...');
-      final response = await http.get(Uri.parse('http://192.168.8.129:3000/api/message-counts'));
+      print('Attempting to fetch from API Dashboard...');
+      final response = await http.get(Uri.parse('http://192.168.204.50:3000/api/message-counts'));
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');

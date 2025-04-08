@@ -5,6 +5,7 @@ import 'complaint_model.dart';
 
 class ApiService {
   static Future<List<Complaint>> fetchComplaints() async {
+    print('Attempting to fetch from API Complaint...');
     final response = await http.get(Uri.parse('http://192.168.181.241:3000/api/complain'));
 
     if (response.statusCode == 200) {
