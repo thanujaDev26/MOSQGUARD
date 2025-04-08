@@ -11,8 +11,8 @@ class CustomHome extends StatefulWidget {
 }
 
 class _CustomHomeState extends State<CustomHome> {
-  int totalCount = 0;
-  int past24HourCount = 0;
+  int total_count = 0;
+  int past_24_hour_count = 0;
   bool isLoading = true;
 
   @override
@@ -23,14 +23,16 @@ class _CustomHomeState extends State<CustomHome> {
 
   Future<void> loadCounts() async {
     try {
+      print("============================Attempting to connect to API...===============================");
       final counts = await ApiService.fetchMessageCounts();
-      print("Fetched counts: ${counts.totalCount}, ${counts.past24HourCount}");
+      print("Fetched counts: ${counts.total_count}, ${counts.past_24_hour_count}");
       setState(() {
-        totalCount = counts.totalCount;
-        past24HourCount = counts.past24HourCount;
+        total_count = counts.total_count;
+        past_24_hour_count = counts.past_24_hour_count;
         isLoading = false;
       });
     } catch (e) {
+      print("Full error details: $e");
       print("Error fetching counts: $e");
       setState(() {
         isLoading = false;
@@ -40,6 +42,13 @@ class _CustomHomeState extends State<CustomHome> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    if (total_count == 0 && past_24_hour_count == 0) {
+      return Center(child: Text("Failed to load data"));
+    }
     return isLoading
         ? Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
@@ -72,7 +81,7 @@ class _CustomHomeState extends State<CustomHome> {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "$totalCount",
+                                "$total_count",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
@@ -127,7 +136,7 @@ class _CustomHomeState extends State<CustomHome> {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "$past24HourCount",
+                                "$past_24_hour_count",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 32,

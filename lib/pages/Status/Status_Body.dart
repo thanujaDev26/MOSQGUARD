@@ -83,6 +83,8 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 }
 
+
+
 class ReportCard extends StatelessWidget {
   final String location;
   final String time;
