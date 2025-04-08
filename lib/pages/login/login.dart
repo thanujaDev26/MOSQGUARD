@@ -89,79 +89,79 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Enter Your Mobile Number',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
+                // const Text(
+                //   'Enter Your Mobile Number',
+                //   style: TextStyle(
+                //     fontSize: 18.0,
+                //     fontWeight: FontWeight.bold,
+                //     color: Colors.black,
+                //   ),
+                // ),
                 const SizedBox(height: 20.0),
                 Row(
                   children: [
-                    Container(
-                      height: 50,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/icons/sri-lanka.png',
-                            width: 40,
-                            height: 30,
-                          ),
-                          const SizedBox(width: 1.0),
-                          const Icon(Icons.arrow_drop_down),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   height: 50,
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   decoration: BoxDecoration(
+                    //     border: Border.all(color: Colors.grey),
+                    //     borderRadius: BorderRadius.circular(8.0),
+                    //   ),
+                    //   child: Row(
+                    //     // children: [
+                    //     //   Image.asset(
+                    //     //     'assets/icons/sri-lanka.png',
+                    //     //     width: 40,
+                    //     //     height: 30,
+                    //     //   ),
+                    //     //   const SizedBox(width: 1.0),
+                    //     //   const Icon(Icons.arrow_drop_down),
+                    //     // ],
+                    //   ),
+                    // ),
                     const SizedBox(width: 10.0),
-                    Expanded(
-                      child: TextField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          hintText: '0778632148',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: TextField(
+                    //     controller: _phoneController,
+                    //     keyboardType: TextInputType.phone,
+                    //     decoration: InputDecoration(
+                    //       hintText: '0778632148',
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(8.0),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () =>_sendOTP(),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      backgroundColor: const Color(0xff004DB9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: () =>_sendOTP(),
+                //     style: ElevatedButton.styleFrom(
+                //       padding: const EdgeInsets.symmetric(vertical: 12.0),
+                //       backgroundColor: const Color(0xff004DB9),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //     ),
+                //     child: const Text(
+                //       'Continue',
+                //       style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 20.0),
                 Row(
-                  children: const [
-                    Expanded(child: Divider(color: Colors.grey)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Or'),
-                    ),
-                    Expanded(child: Divider(color: Colors.grey)),
-                  ],
+                  // children: const [
+                  //   Expanded(child: Divider(color: Colors.grey)),
+                  //   Padding(
+                  //     padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  //     child: Text('Or'),
+                  //   ),
+                  //   Expanded(child: Divider(color: Colors.grey)),
+                  // ],
                 ),
                 const SizedBox(height: 20.0),
                 Padding(
