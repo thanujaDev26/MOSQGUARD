@@ -8,9 +8,46 @@ class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
-
 class _NotificationPageState extends State<NotificationPage> {
-  int newNotificationsCount = 3;
+  List<Map<String, dynamic>> notifications = [
+    {
+      "icon": Icons.warning_amber_rounded,
+      "title": "New Dengue Hotspot Alert",
+      "description": "A new dengue hotspot has been detected near your area.",
+      "timestamp": "5 min ago",
+      "iconColor": Colors.red,
+    },
+    {
+      "icon": Icons.water_drop,
+      "title": "Heavy Rain Expected",
+      "description": "Stay alert! Rainfall can increase mosquito breeding.",
+      "timestamp": "2 hours ago",
+      "iconColor": Colors.blue,
+    },
+    {
+      "icon": Icons.check_circle,
+      "title": "Issue Resolved",
+      "description": "A previously reported hotspot has been addressed.",
+      "timestamp": "1 day ago",
+      "iconColor": Colors.green,
+    },
+    {
+      "icon": Icons.check_circle,
+      "title": "Issue Resolved",
+      "description": "A previously reported hotspot has been addressed.",
+      "timestamp": "1 day ago",
+      "iconColor": Colors.green,
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onNotificationUpdate(notifications.length);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,39 +60,43 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: ListView(
+      body: notifications.isEmpty
+          ? const Center(
+        child: Text(
+          "No notifications",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      )
+          : ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        children: [
-          // Add your notification cards here
-          _buildNotificationCard(
-            icon: Icons.warning_amber_rounded,
-            title: "New Dengue Hotspot Alert",
-            description: "A new dengue hotspot has been detected near your area.",
-            timestamp: "5 min ago",
-            iconColor: Colors.red,
-          ),
-          _buildNotificationCard(
-            icon: Icons.water_drop,
-            title: "Heavy Rain Expected",
-            description: "Stay alert! Rainfall can increase mosquito breeding.",
-            timestamp: "2 hours ago",
-            iconColor: Colors.blue,
-          ),
-          _buildNotificationCard(
-            icon: Icons.check_circle,
-            title: "Issue Resolved",
-            description: "A previously reported hotspot has been addressed.",
-            timestamp: "1 day ago",
-            iconColor: Colors.green,
-          ),
-          _buildNotificationCard(
-            icon: Icons.check_circle,
-            title: "Issue Resolved",
-            description: "A previously reported hotspot has been addressed.",
-            timestamp: "1 day ago",
-            iconColor: Colors.green,
-          ),
-        ],
+        itemCount: notifications.length,
+        itemBuilder: (context, index) {
+          final notif = notifications[index];
+          return Dismissible(
+            key: UniqueKey(),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20.0),
+              color: Colors.red.withOpacity(0.8),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            onDismissed: (direction) {
+              setState(() {
+                notifications.removeAt(index);
+                widget.onNotificationUpdate(notifications.length);
+              });
+            },
+            child: _buildNotificationCard(
+              icon: notif['icon'],
+              title: notif['title'],
+              description: notif['description'],
+              timestamp: notif['timestamp'],
+              iconColor: notif['iconColor'],
+              index: index,
+            ),
+          );
+        },
       ),
     );
   }
@@ -66,6 +107,7 @@ class _NotificationPageState extends State<NotificationPage> {
     required String description,
     required String timestamp,
     required Color iconColor,
+    required int index,
   }) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -95,8 +137,8 @@ class _NotificationPageState extends State<NotificationPage> {
           icon: const Icon(Icons.delete, color: Colors.grey),
           onPressed: () {
             setState(() {
-              if (newNotificationsCount > 0) newNotificationsCount--;
-              widget.onNotificationUpdate(newNotificationsCount); // Pass the new count to parent
+              notifications.removeAt(index);
+              widget.onNotificationUpdate(notifications.length);
             });
           },
         ),
