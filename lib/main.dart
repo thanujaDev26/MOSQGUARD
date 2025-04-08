@@ -2,13 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mosqguard/pages/AboutUs/AboutUs.dart';
 import 'package:mosqguard/pages/ContactUs/ContactUs.dart';
-import 'package:mosqguard/pages/onBoardingScreens/onboarding.dart';
 import 'package:mosqguard/pages/splash/splash.dart';
 import 'package:mosqguard/utils/language_notifier.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/pages/News/News.dart';
-
 import 'pages/dashboard/Monthly_Report.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

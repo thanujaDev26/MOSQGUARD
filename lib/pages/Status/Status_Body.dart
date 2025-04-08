@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mosqguard/utils/theme_notifier.dart';
+import 'api_service.dart';
+import 'complaint_model.dart';
 
 class StatusBody extends StatelessWidget {
   const StatusBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    final isDarkMode = Provider.of<ThemeNotifier>(context).themeMode == ThemeMode.dark;
 
     return SafeArea(
       child: Scaffold(
@@ -21,43 +22,62 @@ class StatusBody extends StatelessWidget {
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
-
   @override
   State<StatusScreen> createState() => _StatusScreenState();
 }
 
 class _StatusScreenState extends State<StatusScreen> {
+  Future<List<Complaint>>? _complaintsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _complaintsFuture = ApiService.fetchComplaints();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _buildReportsList(),
-        ],
-      ),
-    );
-  }
+      body: FutureBuilder<List<Complaint>>(
+        future: _complaintsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No complaints found.'));
+          }
 
-  Widget _buildReportsList() {
-    return SliverPadding(
-      padding: const EdgeInsets.all(16),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-              (context, index) {
-            final status = ['In Progress', 'Completed', 'Rejected'][index % 3];
-            return ReportCard(
-              location: 'Kedawas Area ${index + 1}',
-              time: '06/01/2023 04:05PM',
-              status: status,
-              imageUrl: 'https://picsum.photos/200/200?random=$index',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ReportDetailsScreen()),
+          final complaints = snapshot.data!;
+          return CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      final complaint = complaints[index];
+                      return ReportCard(
+                        location: complaint.location,
+                        time: complaint.datetime,
+                        status: complaint.status,
+                        imageUrl: complaint.imageUrl,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ReportDetailsScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: complaints.length,
+                  ),
+                ),
               ),
-            );
-          },
-          childCount: 10,
-        ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -81,21 +101,10 @@ class ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    Color borderColor;
-    switch (status.toLowerCase()) {
-      case 'completed':
-        borderColor = colorScheme.secondary;
-        break;
-      case 'rejected':
-        borderColor = colorScheme.error;
-        break;
-      default:
-        borderColor = colorScheme.primary;
-        break;
-    }
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final borderColor = _getBorderColor(status, colorScheme);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -127,30 +136,26 @@ class ReportCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildInfoRow(
-                          context,
-                          Icons.location_on,
-                          'Location',
-                          location,
-                          colorScheme.primary,
-                        ),
+                        _buildInfoRow(context, Icons.location_on, 'Location', location, colorScheme.primary),
                         const SizedBox(height: 8),
-                        _buildInfoRow(
-                          context,
-                          Icons.access_time,
-                          'Time',
-                          time,
-                          colorScheme.onSurface.withOpacity(0.6),
-                        ),
+                        _buildInfoRow(context, Icons.access_time, 'Time', time, colorScheme.onSurface.withOpacity(0.6)),
                         const SizedBox(height: 8),
-                        _buildStatusBadge(context),
+                        StatusBadge(status: status),
                       ],
                     ),
                   ),
                   const SizedBox(width: 16),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(imageUrl, width: 100, height: 100, fit: BoxFit.cover),
+                    child: Image.network(
+                      imageUrl,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.broken_image, size: 100);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -161,24 +166,32 @@ class ReportCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(
-      BuildContext context,
-      IconData icon,
-      String label,
-      String value,
-      Color iconColor,
-      ) {
+  Color _getBorderColor(String status, ColorScheme colorScheme) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return colorScheme.secondary;
+      case 'rejected':
+        return colorScheme.error;
+      default:
+        return colorScheme.primary;
+    }
+  }
+
+  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value, Color iconColor) {
     final textTheme = Theme.of(context).textTheme;
+    final mutedTextColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.7);
 
     return Row(
       children: [
         Icon(icon, size: 18, color: iconColor),
         const SizedBox(width: 8),
-        Text('$label: ', style: textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-        )),
+        Text(
+          '$label: ',
+          style: textTheme.bodySmall?.copyWith(color: mutedTextColor),
+        ),
         Expanded(
-          child: Text(value,
+          child: Text(
+            value,
             style: textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
               color: Theme.of(context).colorScheme.onSurface,
@@ -189,43 +202,52 @@ class ReportCard extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildStatusBadge(BuildContext context) {
+class StatusBadge extends StatelessWidget {
+  final String status;
+
+  const StatusBadge({super.key, required this.status});
+
+  @override
+  Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    Color statusColor;
-    IconData statusIcon;
+
+    Color badgeColor;
+    IconData badgeIcon;
 
     switch (status.toLowerCase()) {
       case 'completed':
-        statusColor = colorScheme.secondary;
-        statusIcon = Icons.check_circle;
+        badgeColor = colorScheme.secondary;
+        badgeIcon = Icons.check_circle;
         break;
       case 'rejected':
-        statusColor = colorScheme.error;
-        statusIcon = Icons.cancel;
+        badgeColor = colorScheme.error;
+        badgeIcon = Icons.cancel;
         break;
       default:
-        statusColor = colorScheme.primary;
-        statusIcon = Icons.refresh;
-        break;
+        badgeColor = colorScheme.primary;
+        badgeIcon = Icons.refresh;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: badgeColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(statusIcon, size: 16, color: statusColor),
+          Icon(badgeIcon, size: 16, color: badgeColor),
           const SizedBox(width: 6),
-          Text(status,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: statusColor,
-                fontWeight: FontWeight.w500,
-              )),
+          Text(
+            status,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: badgeColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -239,8 +261,10 @@ class ReportDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Report details go here.',
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        child: Text(
+          'Report details go here.',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
       ),
     );
   }
