@@ -9,38 +9,9 @@ class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
-class _NotificationPageState extends State<NotificationPage> {
-  List<Map<String, dynamic>> notifications = [
-    // {
-    //   "icon": Icons.warning_amber_rounded,
-    //   "title": "New Dengue Hotspot Alert",
-    //   "description": "A new dengue hotspot has been detected near your area.",
-    //   "timestamp": "5 min ago",
-    //   "iconColor": Colors.red,
-    // },
-    // {
-    //   "icon": Icons.water_drop,
-    //   "title": "Heavy Rain Expected",
-    //   "description": "Stay alert! Rainfall can increase mosquito breeding.",
-    //   "timestamp": "2 hours ago",
-    //   "iconColor": Colors.blue,
-    // },
-    // {
-    //   "icon": Icons.check_circle,
-    //   "title": "Issue Resolved",
-    //   "description": "A previously reported hotspot has been addressed.",
-    //   "timestamp": "1 day ago",
-    //   "iconColor": Colors.green,
-    // },
-    // {
-    //   "icon": Icons.check_circle,
-    //   "title": "Issue Resolved",
-    //   "description": "A previously reported hotspot has been addressed.",
-    //   "timestamp": "1 day ago",
-    //   "iconColor": Colors.green,
-    // },
-  ];
 
+class _NotificationPageState extends State<NotificationPage> {
+  List<Map<String, dynamic>> notifications = [];
 
   @override
   void initState() {
@@ -51,6 +22,19 @@ class _NotificationPageState extends State<NotificationPage> {
     });
   }
 
+  void _removeNotification(int index) {
+    setState(() {
+      notifications.removeAt(index);
+    });
+    widget.onNotificationUpdate(notifications.length);
+  }
+
+  @override
+  void dispose() {
+    // When closing the screen, send back the updated count
+    Navigator.pop(context, notifications.length);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +68,7 @@ class _NotificationPageState extends State<NotificationPage> {
               color: Colors.red.withOpacity(0.8),
               child: const Icon(Icons.delete, color: Colors.white),
             ),
-            onDismissed: (direction) {
-              setState(() {
-                notifications.removeAt(index);
-                widget.onNotificationUpdate(notifications.length);
-              });
-            },
+            onDismissed: (_) => _removeNotification(index),
             child: _buildNotificationCard(
               icon: notif['icon'],
               title: notif['title'],
@@ -138,12 +117,7 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.grey),
-          onPressed: () {
-            setState(() {
-              notifications.removeAt(index);
-              widget.onNotificationUpdate(notifications.length);
-            });
-          },
+          onPressed: () => _removeNotification(index),
         ),
       ),
     );
