@@ -15,10 +15,31 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
 
   // Replace with your actual district list from API if available
   final List<String> districts = [
-    'District 1',
-    'District 2',
-    'District 3',
-    'District 4',
+    'Ampara',
+    'Anuradhapura',
+    'Badulla',
+    'Batticaloa',
+    'Colombo',
+    'Galle',
+    'Gampaha',
+    'Hambantota',
+    'Jaffna',
+    'Kalutara',
+    'Kandy',
+    'Kegalle',
+    'Kilinochchi',
+    'Kurunegala',
+    'Mannar',
+    'Matale',
+    'Matara',
+    'Monaragala',
+    'Mullaitivu',
+    'Nuwara Eliya',
+    'Polonnaruwa',
+    'Puttalam',
+    'Ratnapura',
+    'Trincomalee',
+    'Vavuniya',
   ];
 
   Future<void> fetchReport() async {
