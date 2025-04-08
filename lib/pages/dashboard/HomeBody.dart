@@ -35,7 +35,7 @@ class CustomHome extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "12",
+                                "129",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
@@ -89,7 +89,7 @@ class CustomHome extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "2",
+                                "4",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 32,
