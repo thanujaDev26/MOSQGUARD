@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class ReportingScreen extends StatefulWidget {
   const ReportingScreen({super.key});
@@ -67,13 +70,52 @@ class _ComplaintFormState extends State<ReportingScreen> {
     });
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Form Submitted Successfully!")),
-      );
+      final url = Uri.parse("http://172.20.10.2:3000/api/complain");
+      List<String> base64Images = _selectedImages.map((image) {
+        List<int> imageBytes = image.readAsBytesSync();
+        return base64Encode(imageBytes);
+      }).toList();
+
+      final Map<String, dynamic> complaintData = {
+        "fName": _firstNameController.text,
+        "lName": _lastNameController.text,
+        "NIC": _nicController.text,
+        "mobileNumber": _mobileController.text,
+        "location": _locationController.text,
+        "type": selectedLanguage,
+        "complain": _complaintController.text,
+        "images": base64Images,
+      };
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(complaintData),
+        );
+
+        if (response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Complaint Submitted Successfully!")),
+          );
+          _clearForm();
+        } else {
+          print("Failed: ${response.body}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error: ${response.statusCode}")),
+          );
+        }
+      } catch (e) {
+        print("Error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Something went wrong: $e")),
+        );
+      }
     }
   }
+
 
   Color getPrimaryButtonColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark ? Colors.white : const Color(0xff002353);
