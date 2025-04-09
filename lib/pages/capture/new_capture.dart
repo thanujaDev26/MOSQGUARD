@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../notification/notification_service.dart';
+
 
 class ReportingScreen extends StatefulWidget {
   const ReportingScreen({super.key});
@@ -72,7 +74,7 @@ class _ComplaintFormState extends State<ReportingScreen> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      final url = Uri.parse("http://192.168.181.241:3000/api/complain");
+      final url = Uri.parse("http://172.20.10.2:3000/api/complain");
       List<String> base64Images = _selectedImages.map((image) {
         List<int> imageBytes = image.readAsBytesSync();
         return base64Encode(imageBytes);
@@ -97,11 +99,22 @@ class _ComplaintFormState extends State<ReportingScreen> {
         );
 
         if (response.statusCode == 201) {
+          NotificationService().addNotification({
+            "icon": Icons.send,
+            "title": "Complaint Submitted",
+            "description": "Your complaint has been received successfully.",
+            "timestamp": "Just now",
+            "iconColor": Colors.teal,
+          });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Complaint Submitted Successfully!")),
+            SnackBar(
+              content: Text("Complaint submitted successfully."),
+              backgroundColor: Colors.teal,
+            ),
           );
           _clearForm();
-        } else {
+        }
+        else {
           print("Failed: ${response.body}");
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Error: ${response.statusCode}")),
