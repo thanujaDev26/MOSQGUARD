@@ -51,14 +51,18 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
     });
 
     try {
+      // Debugging: Printing selected district
+      print('Fetching report for district: $selectedDistrict');
       final response = await http.get(Uri.parse(
-          'http://localhost:3000/api/monthly_report?district=$selectedDistrict'));
+          'http://192.168.204.50:3000/api/monthly_report?district=$selectedDistrict'));
 
       if (response.statusCode == 200) {
         setState(() {
           reportData = json.decode(response.body);
           isLoading = false;
         });
+        // Debugging: Printing response data
+        debugPrint('Report Data: ${json.encode(reportData)}');
       } else {
         throw Exception('Failed to load report');
       }
@@ -67,6 +71,8 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
         isLoading = false;
         errorMessage = 'Error fetching data: $e';
       });
+      // Debugging: Printing error
+      print('Error fetching data: $e');
     }
   }
 
@@ -131,6 +137,8 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
           onChanged: (value) {
             setState(() {
               selectedDistrict = value;
+              // Debugging: Print selected district
+              print('District selected: $selectedDistrict');
             });
             fetchReport();
           },
