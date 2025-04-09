@@ -6,7 +6,8 @@ class ApiService {
   static Future<MessageCountModel> fetchMessageCounts() async {
     try {
       print('Attempting to fetch from API Dashboard...');
-      final response = await http.get(Uri.parse('http://192.168.204.50:3000/api/message-counts'));
+
+    final response = await http.get(Uri.parse('http://172.20.10.2:3000/api/message-counts'));
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');

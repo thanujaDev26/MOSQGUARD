@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/notification/notification_service.dart';
 
 class NotificationPage extends StatefulWidget {
   final Function(int) onNotificationUpdate;
@@ -8,46 +9,30 @@ class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
+
 class _NotificationPageState extends State<NotificationPage> {
-  List<Map<String, dynamic>> notifications = [
-    {
-      "icon": Icons.warning_amber_rounded,
-      "title": "New Dengue Hotspot Alert",
-      "description": "A new dengue hotspot has been detected near your area.",
-      "timestamp": "5 min ago",
-      "iconColor": Colors.red,
-    },
-    {
-      "icon": Icons.water_drop,
-      "title": "Heavy Rain Expected",
-      "description": "Stay alert! Rainfall can increase mosquito breeding.",
-      "timestamp": "2 hours ago",
-      "iconColor": Colors.blue,
-    },
-    {
-      "icon": Icons.check_circle,
-      "title": "Issue Resolved",
-      "description": "A previously reported hotspot has been addressed.",
-      "timestamp": "1 day ago",
-      "iconColor": Colors.green,
-    },
-    {
-      "icon": Icons.check_circle,
-      "title": "Issue Resolved",
-      "description": "A previously reported hotspot has been addressed.",
-      "timestamp": "1 day ago",
-      "iconColor": Colors.green,
-    },
-  ];
+  List<Map<String, dynamic>> notifications = [];
 
   @override
   void initState() {
     super.initState();
+    notifications = NotificationService().getNotifications();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onNotificationUpdate(notifications.length);
     });
   }
 
+  void _removeNotification(int index) {
+    setState(() {
+      notifications.removeAt(index);
+    });
+    widget.onNotificationUpdate(notifications.length);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +52,38 @@ class _NotificationPageState extends State<NotificationPage> {
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       )
-          : ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notif = notifications[index];
-          return Dismissible(
-            key: UniqueKey(),
-            direction: DismissDirection.endToStart,
-            background: Container(
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 20.0),
-              color: Colors.red.withOpacity(0.8),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            onDismissed: (direction) {
-              setState(() {
-                notifications.removeAt(index);
-                widget.onNotificationUpdate(notifications.length);
-              });
-            },
-            child: _buildNotificationCard(
-              icon: notif['icon'],
-              title: notif['title'],
-              description: notif['description'],
-              timestamp: notif['timestamp'],
-              iconColor: notif['iconColor'],
-              index: index,
-            ),
-          );
+          : Dismissible(
+        direction: DismissDirection.startToEnd, // Allow swipe from left to right to go back
+        key: Key("dismiss_notification_page"), // Unique key for dismissible
+        onDismissed: (_) {
+          Navigator.pop(context, notifications.length);
         },
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: notifications.length,
+          itemBuilder: (context, index) {
+            final notif = notifications[index];
+            return Dismissible(
+              key: UniqueKey(),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20.0),
+                color: Colors.red.withOpacity(0.8),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              onDismissed: (_) => _removeNotification(index),
+              child: _buildNotificationCard(
+                icon: notif['icon'],
+                title: notif['title'],
+                description: notif['description'],
+                timestamp: notif['timestamp'],
+                iconColor: notif['iconColor'],
+                index: index,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -135,12 +122,7 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.grey),
-          onPressed: () {
-            setState(() {
-              notifications.removeAt(index);
-              widget.onNotificationUpdate(notifications.length);
-            });
-          },
+          onPressed: () => _removeNotification(index),
         ),
       ),
     );
