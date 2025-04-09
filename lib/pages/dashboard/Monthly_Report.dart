@@ -1,280 +1,222 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MonthlyReportPage extends StatefulWidget {
-  const MonthlyReportPage({super.key});
-
   @override
-  State<MonthlyReportPage> createState() => _MonthlyReportPageState();
+  _MonthlyReportPageState createState() => _MonthlyReportPageState();
 }
 
 class _MonthlyReportPageState extends State<MonthlyReportPage> {
-  final List<String> _districts = [
-    'Colombo',
-    'Gampaha',
-    'Kalutara',
-    'Kandy',
-    'Matale',
-    'Nuwara Eliya'
-  ];
-  String? _selectedDistrict;
-  DateTime? _selectedDate;
-  final TextEditingController _dateController = TextEditingController();
+  String? selectedDistrict;
+  Map<String, dynamic> reportData = {};
+  bool isLoading = false;
+  String errorMessage = '';
 
-  final List<Map<String, dynamic>> _reportData = [
-    {'category': 'Total Cases', 'count': 2450},
-    {'category': 'Total Investigations', 'count': 1980},
-    {'category': 'Recoveries', 'count': 2150},
-    {'category': 'Deaths', 'count': 42},
+  // Replace with your actual district list from API if available
+  final List<String> districts = [
+    'District 1',
+    'District 2',
+    'District 3',
+    'District 4',
   ];
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != _selectedDate) {
+  Future<void> fetchReport() async {
+    if (selectedDistrict == null) return;
+
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+
+    try {
+      final response = await http.get(Uri.parse(
+          'http://localhost:3000/api/monthly_report?district=$selectedDistrict'));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          reportData = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load report');
+      }
+    } catch (e) {
       setState(() {
-        _selectedDate = picked;
-        _dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        isLoading = false;
+        errorMessage = 'Error fetching data: $e';
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Monthly Report',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+            'Monthly Health Report',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black,
+        centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildSearchSection(isDarkMode, colorScheme),
-            const SizedBox(height: 24),
-            _buildReportTable(colorScheme),
+            _buildDistrictSelector(),
+            SizedBox(height: 20),
+            if (isLoading) LinearProgressIndicator(),
+            if (errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            if (reportData.isNotEmpty) _buildReportGrid(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSearchSection(bool isDarkMode, ColorScheme colorScheme) {
+  Widget _buildDistrictSelector() {
     return Card(
-      elevation: 2,
+      elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth > 600) {
-              return Row(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            labelText: 'Select District',
+            prefixIcon: Icon(Icons.location_on),
+          ),
+          value: selectedDistrict,
+          items: districts
+              .map((district) => DropdownMenuItem(
+            value: district,
+            child: Text(district),
+          ))
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedDistrict = value;
+            });
+            fetchReport();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReportGrid() {
+    return GridView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 2 : 1,
+        childAspectRatio: 2.5,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      children: [
+        _StatCard(
+          title: 'Total Cases',
+          value: reportData['totalCases'].toString(),
+          icon: Icons.assignment,
+          color: Colors.blue,
+        ),
+        _StatCard(
+          title: 'Investigations',
+          value: reportData['totalInvestigations'].toString(),
+          icon: Icons.assignment_turned_in,
+          color: Colors.orange,
+        ),
+        _StatCard(
+          title: 'Deaths',
+          value: reportData['totalDeaths'].toString(),
+          icon: Icons.warning,
+          color: Colors.red,
+        ),
+        _StatCard(
+          title: 'Recoveries',
+          value: reportData['totalRecoveries'].toString(),
+          icon: Icons.health_and_safety,
+          color: Colors.green,
+        ),
+      ],
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _StatCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child: _buildDateField(colorScheme)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildDistrictDropdown(colorScheme)),
-                  const SizedBox(width: 16),
-                  _buildSearchButton(colorScheme),
-                ],
-              );
-            } else {
-              return Column(
-                children: [
-                  _buildDateField(colorScheme),
-                  const SizedBox(height: 16),
-                  _buildDistrictDropdown(colorScheme),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: _buildSearchButton(colorScheme),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
                   ),
                 ],
-              );
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchButton(ColorScheme colorScheme) {
-    return ElevatedButton.icon(
-      icon: Icon(Icons.search, color: colorScheme.onPrimary),
-      label: Text('Search', style: TextStyle(color: colorScheme.onPrimary)),
-      onPressed: _handleSearch,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF004DB9),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      ),
-    );
-  }
-
-  void _handleSearch() {
-    // Implement your search logic using:
-    // - _selectedDate
-    // - _selectedDistrict
-    print('Searching with date: $_selectedDate, district: $_selectedDistrict');
-  }
-
-  Widget _buildDateField(ColorScheme colorScheme) {
-    return TextFormField(
-      controller: _dateController,
-      decoration: InputDecoration(
-        labelText: 'Search by Date',
-        prefixIcon: const Icon(Icons.calendar_today),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            setState(() {
-              _selectedDate = null;
-              _dateController.clear();
-            });
-          },
-        ),
-      ),
-      readOnly: true,
-      onTap: () => _selectDate(context),
-    );
-  }
-
-  Widget _buildDistrictDropdown(ColorScheme colorScheme) {
-    return DropdownButtonFormField<String>(
-      value: _selectedDistrict,
-      decoration: InputDecoration(
-        labelText: 'Select District',
-        prefixIcon: const Icon(Icons.location_on),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      items: _districts
-          .map((district) => DropdownMenuItem(
-        value: district,
-        child: Text(district),
-      ))
-          .toList(),
-      onChanged: (value) => setState(() => _selectedDistrict = value),
-      dropdownColor: colorScheme.surface,
-    );
-  }
-
-  Widget _buildReportTable(ColorScheme colorScheme) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _buildTableHeader(colorScheme),
-            const SizedBox(height: 8),
-            ..._reportData.map((data) => _buildTableRow(
-              data['category'],
-              data['count'].toString(),
-              colorScheme,
-            )),
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTableHeader(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Color(0xFF004DB9).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Category',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 16,
-              )),
-          Text('Count',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 16,
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTableRow(String label, String value, ColorScheme colorScheme) {
-    IconData icon;
-    Color iconColor;
-
-    switch(label) {
-      case 'Total Cases':
-        icon = Icons.assignment;
-        iconColor = Colors.orange;
-        break;
-      case 'Total Investigations':
-        icon = Icons.search;
-        iconColor = Colors.blue;
-        break;
-      case 'Recoveries':
-        icon = Icons.health_and_safety;
-        iconColor = Colors.green;
-        break;
-      case 'Deaths':
-        icon = Icons.warning;
-        iconColor = Colors.red;
-        break;
-      default:
-        icon = Icons.info;
-        iconColor = Color(0xFF004DB9);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: iconColor, size: 20),
-              const SizedBox(width: 12),
-              Text(label,
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 14,
-                  )),
-            ],
-          ),
-          Text(value,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004DB9),
-                fontSize: 14,
-              )),
-        ],
       ),
     );
   }

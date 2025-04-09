@@ -11,20 +11,6 @@ import 'pages/dashboard/Monthly_Report.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
-
-
-// void main() async{
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//   runApp(
-//     ChangeNotifierProvider(
-//       create: (context) => ThemeNotifier(),
-//       child: const MyApp(),
-//     ),
-//   );
-// }
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
