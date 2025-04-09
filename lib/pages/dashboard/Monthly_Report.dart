@@ -97,7 +97,7 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
         child: DropdownButtonFormField<String>(
           decoration: InputDecoration(
             border: InputBorder.none,
-            labelText: 'Select District',
+            labelText: 'Select the District',
             prefixIcon: Icon(Icons.location_on),
           ),
           value: selectedDistrict,
