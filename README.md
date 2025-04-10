@@ -28,6 +28,6 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://https://github.com/thanujaDev26/MOSQGUARD.git
+   git clone https://github.com/thanujaDev26/MOSQGUARD.git]
    cd mosqguard
    flutter pub get
