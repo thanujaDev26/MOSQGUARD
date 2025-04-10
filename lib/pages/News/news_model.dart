@@ -16,13 +16,24 @@ class News {
   });
 
   factory News.fromJson(Map<String, dynamic> json) {
-    return News(
-      id: json['EventId'],
-      title: json['title'],
-      message: json['message'],
-      date: json['date'],
-      venue: json['venue'],
-      imageUrls: List<String>.from(json['imageUrls'] ?? []),
-    );
+  List<String> parsedImageUrls = [];
+
+  if (json['imageUrls'] != null && json['imageUrls'] is String) {
+    try {
+      final decoded = jsonDecode(json['imageUrls']);
+      parsedImageUrls = List<String>.from(decoded);
+    } catch (e) {
+     
+    }
   }
+
+  return News(
+    id: json['EventId'],
+    title: json['title'],
+    message: json['message'],
+    date: json['date'],
+    venue: json['venue'],
+    imageUrls: parsedImageUrls,
+  );
+}
 }
