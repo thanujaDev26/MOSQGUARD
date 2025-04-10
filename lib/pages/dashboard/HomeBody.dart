@@ -1,14 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:mosqguard/pages/dashboard/map_screen.dart';
+import 'Home_Body_Api.dart';
 
-class CustomHome extends StatelessWidget {
+
+class CustomHome extends StatefulWidget {
   const CustomHome({super.key});
 
   @override
+  State<CustomHome> createState() => _CustomHomeState();
+}
+
+class _CustomHomeState extends State<CustomHome> {
+  int total_count = 0;
+  int past_24_hour_count = 0;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadCounts();
+  }
+
+  Future<void> loadCounts() async {
+    try {
+      print("============================Attempting to connect to API...===============================");
+      final counts = await ApiService.fetchMessageCounts();
+      print("Fetched counts: ${counts.total_count}, ${counts.past_24_hour_count}");
+      setState(() {
+        total_count = counts.total_count;
+        past_24_hour_count = counts.past_24_hour_count;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Full error details: $e");
+      print("Error fetching counts: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    if (total_count == 0 && past_24_hour_count == 0) {
+      return Center(child: Text("Failed to load data"));
+    }
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : SingleChildScrollView(
       child: Column(
         children: [
-          // Cards Section
+          // Your cards here
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -35,7 +81,7 @@ class CustomHome extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "12",
+                                "$total_count",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
@@ -53,9 +99,7 @@ class CustomHome extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 16),
-
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -79,7 +123,8 @@ class CustomHome extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Icon(Icons.access_time, color: Colors.red),
+                                  Icon(Icons.access_time,
+                                      color: Colors.red),
                                 ],
                               ),
                               Text(
@@ -91,7 +136,7 @@ class CustomHome extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                "2",
+                                "$past_24_hour_count",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 32,
@@ -109,7 +154,9 @@ class CustomHome extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/monthly_report');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -123,21 +170,11 @@ class CustomHome extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16),
-          // Map Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Container(
-                  height: 200,
-                  color: Colors.grey[300],
-                  child: Center(
-                    child: Text(
-                      "Map Placeholder",
-                      style: TextStyle(color: Colors.black45),
-                    ),
-                  ),
-                ),
+                MapScreen(),
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -155,46 +192,17 @@ class CustomHome extends StatelessWidget {
       ),
     );
   }
-}
-
-class LegendItem extends StatelessWidget {
-  final Color color;
-  final String label;
-
-  const LegendItem({
-    required this.color,
-    required this.label,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLegendItem(String label, Color color) {
     return Row(
       children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+        CircleAvatar(
+          radius: 6,
+          backgroundColor: color,
         ),
-        const SizedBox(width: 8),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        SizedBox(width: 4),
+        Text(label, style: TextStyle(fontSize: 12)),
       ],
     );
   }
 }
 
-Widget _buildLegendItem(String label, Color color) {
-  return Row(
-    children: [
-      CircleAvatar(
-        radius: 6,
-        backgroundColor: color,
-      ),
-      SizedBox(width: 4),
-      Text(label, style: TextStyle(fontSize: 12)),
-    ],
-  );
-}

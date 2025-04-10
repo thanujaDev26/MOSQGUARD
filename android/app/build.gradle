@@ -4,21 +4,23 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     // Removed Google Services plugin since Firebase is not being used
-    id "dev.flutter.flutter-gradle-plugin"  // Flutter Gradle Plugin
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace = "com.example.mosqguard"
+    namespace = "com.android.mosqguard"
 
     // Update compileSdkVersion to 34
-    compileSdkVersion 34
+    compileSdkVersion 35
 
     defaultConfig {
-        applicationId = "com.example.mosqguard"
-        minSdkVersion 21
-        targetSdkVersion 34  // Update targetSdkVersion to 34
+        applicationId = "com.android.mosqguard"
+        minSdkVersion 23
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0.0"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -42,3 +44,11 @@ android {
 flutter {
     source = "../.."  // Path to the Flutter source (usually not changed unless necessary)
 }
+
+dependencies {
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+}
+
+apply plugin: 'com.google.gms.google-services' // Add this line to the end of the file
+

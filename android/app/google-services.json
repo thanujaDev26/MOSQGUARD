@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "510801180620",
+    "project_id": "dengue-shield-webapp-log-c8797",
+    "storage_bucket": "dengue-shield-webapp-log-c8797.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510801180620:android:3967d72b9e6300d56b0f69",
+        "android_client_info": {
+          "package_name": "com.android.mosqguard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx1QO028GRrFEc6QoV2J1uKgky_mcHpv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

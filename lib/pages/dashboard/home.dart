@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mosqguard/pages/Appbar/Header.dart';
-import 'package:mosqguard/pages/Appbar/Footer.dart';
-import 'package:mosqguard/pages/dashboard/HomeBody.dart';
-import 'package:mosqguard/pages/Appbar/Drawer.dart';
+import '../sidebar/sidebar.dart';
+import '../Appbar/Footer.dart';
+import '../Appbar/Header.dart';
+import 'HomeBody.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -10,8 +10,22 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       body: CustomHome(),
-      drawer: CustomDrawer(), // The Sidebar is now connected here
+      drawer: Sidebar(),
       bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+
+  Widget _buildLegendItem(String label, Color color) {
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 6,
+          backgroundColor: color,
+        ),
+        SizedBox(width: 4),
+        Text(label, style: TextStyle(fontSize: 12)),
+      ],
+
     );
   }
 }

@@ -1,0 +1,2 @@
+/Users/thanujadev26/Desktop/MOSQGUARD/android/app/.cxx/Debug/6o6py6y3/x86_64/CMakeFiles/edit_cache.dir
+/Users/thanujadev26/Desktop/MOSQGUARD/android/app/.cxx/Debug/6o6py6y3/x86_64/CMakeFiles/rebuild_cache.dir
