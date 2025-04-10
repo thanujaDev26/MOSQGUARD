@@ -1,16 +1,33 @@
-# mosqguard
+# 🦟 MosqGuard
 
-A new Flutter project.
+**MosqGuard** is a mobile application designed to combat mosquito-borne diseases by providing real-time risk alerts, hotspot mapping, and educational resources. Developed as a final year university project, MosqGuard empowers communities to stay informed and take proactive measures for better public health.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- 📍 **Mosquito Hotspot Map** – Real-time display of mosquito-prone areas using crowdsourced and health data.
+- 🚨 **Risk Alerts** – Get notified about dengue or malaria outbreaks in your area.
+- 🧠 **Education Hub** – Learn how to prevent mosquito bites and disease transmission.
+- 📊 **User Reports** – Contribute by reporting mosquito sightings or symptoms.
+- 🌐 **Offline Support** – Access vital information even without internet.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Frontend**: Flutter
+- **Backend**: Node.js with Express.js
+- **Database**: AWS RDS
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter
+- Express.JS(Node.JS)
+- AWS Account
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://https://github.com/thanujaDev26/MOSQGUARD.git
+   cd mosqguard
+   flutter pub get
